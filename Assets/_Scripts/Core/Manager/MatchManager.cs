@@ -34,7 +34,7 @@ public class MatchManager : MonoBehaviour
         selectedCards.Add(clickedCard);
         GameEventHandler.OnCardFlipped?.Invoke(clickedCard);
 
-        if (selectedCards.Count == 1)
+        if (selectedCards.Count == 1) 
         {
             if (clickedCard.CardData.isBomb) isBombActive = true;
             return;
@@ -45,6 +45,10 @@ public class MatchManager : MonoBehaviour
             if (selectedCards[0].CardData.isBomb && selectedCards[1].CardData.isBomb)
             {
                 StartCoroutine(ProcessTwoBombsMatch());
+            }
+            else if (!selectedCards[0].CardData.isBomb && selectedCards[1].CardData.isBomb)
+            {
+                StartCoroutine(ProcessNormalThenBomb());
             }
             else if (!isBombActive)
             {
@@ -83,6 +87,26 @@ public class MatchManager : MonoBehaviour
         }
 
         EndAttempt();
+    }
+
+    private IEnumerator ProcessNormalThenBomb()
+    {
+        isProcessMatch = true;
+        yield return new WaitForSeconds(0.5f);
+
+        Card normalCard = selectedCards[0];
+        Card bombCard = selectedCards[1];
+
+        normalCard.FlipClose();
+
+        selectedCards.Clear();
+        selectedCards.Add(bombCard);
+
+        isBombActive = true;
+        isProcessMatch = false;
+
+        ScoreManager.Instance.RegisterTurn();
+        GameManager.Instance.EvaluateTurnLossCondition();
     }
 
     private IEnumerator ProcessTwoBombsMatch()
@@ -138,6 +162,12 @@ public class MatchManager : MonoBehaviour
         ScoreManager.Instance.RegisterTurn(); 
         selectedCards.Clear();
         isProcessMatch = false;
+
+        if (BoardManager.Instance.AllSafeCardMatched())
+        {
+            GameManager.Instance.HandleAllSafeCardsCleared();
+            return;
+        }
 
         GameManager.Instance.EvaluateTurnLossCondition();
     }

@@ -12,6 +12,7 @@ public class BoardManager : MonoBehaviour
     [Header("Card Defaults")]
     [SerializeField] private List<CardDataSO> cardDefaultData;
     [SerializeField] private CardDataSO bombData;
+    private List<Card> activeCard = new List<Card>();
 
     private void Awake()
     {
@@ -83,5 +84,14 @@ public class BoardManager : MonoBehaviour
             Card cardComp = cardObj.GetComponent<Card>();
             cardComp.Setup(data);
         }
+    }
+
+    public bool AllSafeCardMatched()
+    {
+        foreach (Card card in activeCard)
+        {
+            if (!card.CardData.isBomb & !card.IsMatched) return false;
+        }
+        return true;
     }
 }

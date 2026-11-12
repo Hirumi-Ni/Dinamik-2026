@@ -79,6 +79,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void HandleAllSafeCardsCleared()
+    {
+        if (CurrentState != GameState.Match) return;
+
+        if (ScoreManager.Instance.IsTargetReached())
+        {
+            Debug.Log("Semua kartu aman terbuka & Target tercapai! Otomatis lanjut ke Shop.");
+            //CompleteMatch();
+        }
+        else
+        {
+            Debug.Log("Semua kartu aman habis terbuka, tapi skor tidak mencukupi target! Game Over.");
+            //SetState(GameState.GameOver);
+        }
+    }
+
     public void CompleteMatch()
     {
         if (CurrentState != GameState.Match) return;
