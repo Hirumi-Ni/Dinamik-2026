@@ -32,6 +32,7 @@ public class BoardManager : MonoBehaviour
 
     private void ClearBoard()
     {
+        activeCard.Clear();
         foreach (Transform item in gridParent.transform)
         {
             Destroy(item.gameObject);
@@ -55,11 +56,14 @@ public class BoardManager : MonoBehaviour
             deck.Add(bombData);
         }
 
+        int startIndex = Random.Range(0, symbolList.Count);
+
         for (int i = 0; i < sigilPairs; i++)
         {
-            CardDataSO randomSigil = symbolList[Random.Range(0, symbolList.Count)];
-            deck.Add(randomSigil);
-            deck.Add(randomSigil);
+            int currentIndex = (startIndex + i) % symbolList.Count;
+            CardDataSO selectedSigil = symbolList[currentIndex];
+            deck.Add(selectedSigil);
+            deck.Add(selectedSigil);
         }
 
         return deck;
@@ -83,6 +87,7 @@ public class BoardManager : MonoBehaviour
             GameObject cardObj = Instantiate(cardPrefab, gridParent.transform);
             Card cardComp = cardObj.GetComponent<Card>();
             cardComp.Setup(data);
+            activeCard.Add(cardComp);
         }
     }
 
@@ -90,7 +95,7 @@ public class BoardManager : MonoBehaviour
     {
         foreach (Card card in activeCard)
         {
-            if (!card.CardData.isBomb & !card.IsMatched) return false;
+            if (!card.CardData.isBomb && !card.IsMatched) return false;
         }
         return true;
     }

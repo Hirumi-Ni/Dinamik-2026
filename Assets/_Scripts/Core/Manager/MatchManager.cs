@@ -171,4 +171,9 @@ public class MatchManager : MonoBehaviour
 
         GameManager.Instance.EvaluateTurnLossCondition();
     }
+
+    public void SetInputLocked(bool isLocked)
+    {
+        isProcessMatch = isLocked;
+    }
 }

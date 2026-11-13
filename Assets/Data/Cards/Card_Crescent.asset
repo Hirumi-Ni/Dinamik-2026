@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Card_Crescent
   m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
   cardName: Crescent Card
-  cardIconSprite: {fileID: 21300000, guid: c55b05e1736659849a898c2e9905a6a0, type: 3}
+  cardIconSprite: {fileID: 21300000, guid: 8179997cdb17c8a47b4c2a4d5f6e7239, type: 3}
   cardType: 3
   cardBaseScore: 100
   isBomb: 0

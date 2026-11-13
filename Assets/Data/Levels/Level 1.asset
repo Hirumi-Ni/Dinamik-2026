@@ -16,6 +16,7 @@ MonoBehaviour:
   levelDesc: Desc
   levelTargetScore: 500
   levelMaxTurn: 10
+  levelMaxCluster: 1
   levelBombPair: 1
   levelSymbols:
   - {fileID: 11400000, guid: dcf6a8cad4240c743a528fc5687f40c9, type: 2}

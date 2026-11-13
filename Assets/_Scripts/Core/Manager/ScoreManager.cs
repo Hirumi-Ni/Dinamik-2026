@@ -35,6 +35,7 @@ public class ScoreManager : MonoBehaviour
     public void AddMatchScore(CardDataSO cardData)
     {
         currentCombo++;
+        Debug.Log($"Combo: {currentCombo}");
 
         int comboMultiplier = (int)Mathf.Pow(2, currentCombo - 1); //1x = 1 combo, 2x = 2 combo, 4x = 3 combo
         int addedScore = cardData.cardBaseScore * comboMultiplier;
@@ -51,6 +52,8 @@ public class ScoreManager : MonoBehaviour
     public void RegisterTurn()
     {
         remainingTurn--;
+        Debug.Log($"Current Turn {remainingTurn}");
+
         if (remainingTurn < 0) remainingTurn = 0;
         GameEventHandler.OnTurnUpdated?.Invoke(remainingTurn);
         NotifyScoreUpdate();

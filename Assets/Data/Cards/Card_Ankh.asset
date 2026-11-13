@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Card_Ankh
   m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
   cardName: Ankh Card
-  cardIconSprite: {fileID: 21300000, guid: 9529190f71664e84d8a23778b9706d6d, type: 3}
+  cardIconSprite: {fileID: 21300000, guid: 2882a7f6e5fabd243b23816008c44580, type: 3}
   cardType: 0
   cardBaseScore: 100
   isBomb: 0

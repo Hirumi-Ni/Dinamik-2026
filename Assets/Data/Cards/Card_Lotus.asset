@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Card_Lotus
   m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
   cardName: Lotus Card
-  cardIconSprite: {fileID: 21300000, guid: de9bf78ec4e068440a680bfd1e3c5609, type: 3}
+  cardIconSprite: {fileID: 21300000, guid: af7a879627a606e4c89f8e9e033c4b2c, type: 3}
   cardType: 2
   cardBaseScore: 100
   isBomb: 0

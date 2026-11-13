@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Card_Death
   m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
   cardName: Death Card
-  cardIconSprite: {fileID: 21300000, guid: 8f68d2c8bdb2c2944abddfe74dfb96bf, type: 3}
+  cardIconSprite: {fileID: 21300000, guid: fadda1d595fa0e2479d8363067ba8cd2, type: 3}
   cardType: 4
   cardBaseScore: 0
   isBomb: 1

@@ -11,6 +11,7 @@ public class LevelDataSO : ScriptableObject
     [Header("Level Value")]
     public int levelTargetScore = 500;      
     public int levelMaxTurn = 10;
+    public int levelMaxCluster = 1;
 
     [Header("Level Cards")]
     public int levelBombPair = 1; // 1 pair = 2 tile/bom

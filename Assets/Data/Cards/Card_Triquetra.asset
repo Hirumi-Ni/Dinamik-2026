@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Card_Triquetra
   m_EditorClassIdentifier: Assembly-CSharp::CardDataSO
   cardName: Triquetra Card
-  cardIconSprite: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
+  cardIconSprite: {fileID: 21300000, guid: e1af517550e0a9a4388fa3bc962e243a, type: 3}
   cardType: 1
   cardBaseScore: 100
   isBomb: 0

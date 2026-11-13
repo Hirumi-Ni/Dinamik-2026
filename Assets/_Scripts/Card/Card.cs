@@ -7,6 +7,8 @@ public class Card : MonoBehaviour
     public CardDataSO CardData { get; private set; }
     [SerializeField] private Image cardBackgroundImage;
     [SerializeField] private Image cardIconImage;
+    [SerializeField] private Sprite cardFrontViewBG;
+    [SerializeField] private Sprite cardBackViewBG;
     [SerializeField] private CanvasGroup tesMatch;
 
     #region [Properties]
@@ -54,11 +56,13 @@ public class Card : MonoBehaviour
     private void ShowFront()
     {
         cardIconImage.gameObject.SetActive(true);
+        cardBackgroundImage.sprite = cardFrontViewBG;
     }
 
     private void ShowBack()
     {
         cardIconImage.gameObject.SetActive(false);
+        cardBackgroundImage.sprite = cardBackViewBG;
     }
 
     public void SetMatched()
