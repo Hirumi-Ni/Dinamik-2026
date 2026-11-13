@@ -3,21 +3,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MatchHUDController : MonoBehaviour
+public class MatchUI : MonoBehaviour
 {
     [Header("Left Panel")]
     [SerializeField] private Button pauseButton;
-    [SerializeField] private TextMeshProUGUI tokenText;
+    [SerializeField] private TMP_Text tokenText;
     [SerializeField] private List<GameObject> lifeIcons; 
-    [SerializeField] private TextMeshProUGUI clusterText;
+    [SerializeField] private TMP_Text clusterText;
 
     [Header("Right Panel")]
-    [SerializeField] private TextMeshProUGUI scoreTargetText;
+    [SerializeField] private TMP_Text scoreTargetText;
     [SerializeField] private Button completeStageButton;
-    [SerializeField] private TextMeshProUGUI currentScoreText;
-    [SerializeField] private TextMeshProUGUI turnText;
-    [SerializeField] private TextMeshProUGUI multText;
-    [SerializeField] private TextMeshProUGUI comboText; 
+    [SerializeField] private TMP_Text currentScoreText;
+    [SerializeField] private TMP_Text turnText;
+    [SerializeField] private TMP_Text multText;
+    [SerializeField] private TMP_Text comboText; 
 
     private void OnEnable()
     {
@@ -57,6 +57,11 @@ public class MatchHUDController : MonoBehaviour
             turnText.text = GameManager.Instance.CurrentLevelData.levelMaxTurn.ToString();
         }
 
+        if (GameManager.Instance.CurrentRun != null)
+        {
+            tokenText.text = GameManager.Instance.CurrentRun.currentTokens.ToString();
+            HandleHPChanged(GameManager.Instance.CurrentRun.currentHP);
+        }
         ResetComboText();
     }
 

@@ -36,8 +36,11 @@ public class ScoreManager : MonoBehaviour
     {
         currentCombo++;
         Debug.Log($"Combo: {currentCombo}");
-
         int comboMultiplier = (int)Mathf.Pow(2, currentCombo - 1); //1x = 1 combo, 2x = 2 combo, 4x = 3 combo
+
+        int grimoireBonus = (GameManager.Instance != null && GameManager.Instance.CurrentRun != null) ? GameManager.Instance.CurrentRun.GetSymbolBonus(cardData.cardType): 0;
+        int grimoireBuffScore= cardData.cardBaseScore + grimoireBonus;
+
         int addedScore = cardData.cardBaseScore * comboMultiplier;
 
         baseScore += addedScore;

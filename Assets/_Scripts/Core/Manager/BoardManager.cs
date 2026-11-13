@@ -20,6 +20,21 @@ public class BoardManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+        {
+            LevelDataSO data = GameManager.Instance.CurrentLevelData;
+            ScoreManager.Instance.ResetScoreForNewLevel(data.levelTargetScore, data.levelMaxTurn);
+            GenerateBoard();
+            GameEventHandler.OnClusterUpdated?.Invoke(GameManager.Instance.CurrentLevelCluster, data.levelMaxCluster);
+        }
+        else
+        {
+            GenerateBoard();
+        }
+    }
+
     public void GenerateBoard()
     {
         ClearBoard();

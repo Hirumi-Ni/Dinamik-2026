@@ -14,7 +14,10 @@ public static class GameEventHandler
     public static Action<int> OnTurnUpdated; // (Current Turn)
     public static Action<int, float, int> OnScoreUpdated; // (BaseScore, TurnMultiplier, TotalScore)
     public static Action<int> OnHPChanged; // (Current HP)
+    public static Action<int> OnTokenChanged; // (Current Token)
     public static Action<GameState> OnGameStateChanged;
     public static Action<int, int> OnClusterUpdated; // (Current Cluster, Max Cluster)
     #endregion
+
+    public static Action OnInventoryUpdated;
 }

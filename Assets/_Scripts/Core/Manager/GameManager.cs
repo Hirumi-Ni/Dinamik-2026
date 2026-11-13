@@ -1,23 +1,22 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    #region [gk tau apa ini refactor belakangan dah]
-    [SerializeField] private int maxHP = 3;
-    private int currentHP;
-    public GameState CurrentState { get; private set; }
-    #endregion
-
-    #region [Level Data]
-    public LevelDataSO CurrentLevelData { get; private set; }
-    public int CurrentLevelStage { get; private set; } = 1;
-    public int CurrentLevelCluster { get; private set; } = 1;
+    [Header("Global Config")]
+    [SerializeField] private int defaultMaxHP = 3;
     [SerializeField] private LevelDataSO startingLevelData;
-    #endregion
+
+    public GameRunStateData CurrentRun { get; private set; }
+    public LevelDataSO CurrentLevelData { get; private set; }
+    public int CurrentLevelCluster { get; private set; } = 1;
+    public GameState CurrentState { get; private set; }
+
+    [SerializeField] private int maxPassiveSlot = 4;
+    [SerializeField] private int maxConsumableSlot = 2;
 
     private void Awake()
     {
@@ -41,39 +40,135 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        StartNewRun();
+        if (CurrentRun == null)
+        {
+            StartNewRun();
+        }
     }
 
     public void StartNewRun()
     {
-        currentHP = maxHP;
-        CurrentLevelStage = 1;
-        GameEventHandler.OnHPChanged?.Invoke(currentHP);
+        CurrentRun = new GameRunStateData(defaultMaxHP);
+        GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
+        GameEventHandler.OnTokenChanged?.Invoke(CurrentRun.currentTokens);
+        GameEventHandler.OnInventoryUpdated?.Invoke();
 
         StartLevel(startingLevelData);
     }
 
     public void StartLevel(LevelDataSO selectedLevel)
     {
-        SetState(GameState.Match);
         CurrentLevelData = selectedLevel;
         CurrentLevelCluster = 1;
-        
-        ScoreManager.Instance.ResetScoreForNewLevel(CurrentLevelData.levelTargetScore, CurrentLevelData.levelMaxTurn);
-        BoardManager.Instance.GenerateBoard();
-        GameEventHandler.OnClusterUpdated?.Invoke(CurrentLevelCluster, CurrentLevelData.levelMaxCluster);
+        SetState(GameState.Match);
+
+        ChangeScene(GameScenes.StageScene);
     }
 
+    public void CompleteMatch()
+    {
+        if (CurrentState != GameState.Match) return;
+        if (!ScoreManager.Instance.IsTargetReached()) return;
+
+        int reward = CalculateStageReward();
+        AddTokens(reward);
+
+        CurrentRun.currentStage++;
+        SetState(GameState.Shop);
+
+        ChangeScene(GameScenes.ShopScene);
+    }
+
+    private int CalculateStageReward()
+    {
+        int baseReward = 25;
+
+        // Bonus dari sisa Turn (semakin hemat turn, semakin kaya)
+        int remainingTurns = Mathf.Max(0, ScoreManager.Instance.remainingTurn);
+        int turnBonus = remainingTurns * 5;
+
+        // Bonus dari skor yang melampaui Target
+        int excessScore = Mathf.Max(0, ScoreManager.Instance.GetTotalScore() - CurrentLevelData.levelTargetScore);
+        int scoreBonus = excessScore / 5;
+
+        return baseReward + turnBonus + scoreBonus;
+    }
+
+    #region [Currency & Shop Transaction Helpers]
+    public void AddTokens(int amount)
+    {
+        CurrentRun.currentTokens += amount;
+        GameEventHandler.OnTokenChanged?.Invoke(CurrentRun.currentTokens);
+    }
+
+    public bool TrySpendTokens(int amount)
+    {
+        if (CurrentRun.currentTokens < amount) return false;
+
+        CurrentRun.currentTokens -= amount;
+        GameEventHandler.OnTokenChanged?.Invoke(CurrentRun.currentTokens);
+        return true;
+    }
+
+    public int GetCurrentHealCost(int baseCost = 40, int increment = 30)
+    {
+        return baseCost + (CurrentRun.healPurchaseCount * increment);
+    }
+
+    public bool TryPurchaseHeal(int baseCost = 40, int increment = 30)
+    {
+        if (CurrentRun.currentHP >= CurrentRun.maxHP) return false;
+
+        int cost = GetCurrentHealCost(baseCost, increment);
+        if (!TrySpendTokens(cost)) return false;
+
+        CurrentRun.healPurchaseCount++;
+        CurrentRun.currentHP++;
+        GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
+        return true;
+    }
+
+    public bool TryPurchaseItem(ShopItemDataSO item)
+    {
+        if (item == null) return false;
+
+        if (item.type == ShopItemType.PassiveBuff && CurrentRun.ownedPassives.Count >= maxPassiveSlot) return false;
+
+        if (item.type == ShopItemType.Consumable && CurrentRun.ownedConsumables.Count >= maxConsumableSlot) return false;
+
+        if (!TrySpendTokens(item.basePrice)) return false;
+
+        switch (item.type)
+        {
+            case ShopItemType.PermanentBuff:
+                CurrentRun.AddSymbolBonus(item.grimoireTarget, item.scoreBonusValue);
+                break;
+
+            case ShopItemType.PassiveBuff:
+                CurrentRun.ownedPassives.Add(item);
+                GameEventHandler.OnInventoryUpdated?.Invoke();
+                break;
+
+            case ShopItemType.Consumable:
+                CurrentRun.ownedConsumables.Add(item);
+                GameEventHandler.OnInventoryUpdated?.Invoke();
+                break;
+        }
+
+        return true;
+    }
+
+    #endregion
+
+    #region [Win & Lose Conditions]
     public void TakeDamage()
     {
-        currentHP--;
-        Debug.Log($"Current HP: {currentHP}");
-        GameEventHandler.OnHPChanged?.Invoke(currentHP);
+        CurrentRun.currentHP--;
+        GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
 
-        if (currentHP <= 0)
+        if (CurrentRun.currentHP <= 0)
         {
             SetState(GameState.GameOver);
-            Debug.Log("YOU LOSE!!!! Nyawanya habis");
         }
     }
 
@@ -82,7 +177,6 @@ public class GameManager : MonoBehaviour
         if (ScoreManager.Instance.remainingTurn <= 0 && !ScoreManager.Instance.IsTargetReached())
         {
             SetState(GameState.GameOver);
-            Debug.Log("YOU LOSE!!! Turnnya habis dan belum menyentuh skor");
         }
     }
 
@@ -94,21 +188,12 @@ public class GameManager : MonoBehaviour
 
         if (CurrentLevelCluster < maxCluster)
         {
-            Debug.Log("Transisi to Next Cluster");
             StartCoroutine(TransitionToNextCluster(maxCluster));
         }
         else
         {
-            if (ScoreManager.Instance.IsTargetReached())
-            {
-                Debug.Log("Semua kartu aman terbuka & Target tercapai! Otomatis lanjut ke Shop.");
-                //CompleteMatch();
-            }
-            else
-            {
-                Debug.Log("Semua kartu aman habis terbuka, tapi skor tidak mencukupi target! Game Over.");
-                //SetState(GameState.GameOver);
-            }
+            if (ScoreManager.Instance.IsTargetReached()) CompleteMatch();
+            else SetState(GameState.GameOver);
         }
     }
 
@@ -123,19 +208,23 @@ public class GameManager : MonoBehaviour
         GameEventHandler.OnClusterUpdated?.Invoke(CurrentLevelCluster, maxCluster);
         BoardManager.Instance.GenerateBoard();
     }
+    #endregion
 
-    public void CompleteMatch()
-    {
-        if (CurrentState != GameState.Match) return;
-        if (!ScoreManager.Instance.IsTargetReached()) return;
-
-        CurrentLevelStage++;
-        SetState(GameState.Shop);
-    }
-
+    #region [States & Scenes Management]
     public void SetState(GameState newState)
     {
         CurrentState = newState;
         GameEventHandler.OnGameStateChanged?.Invoke(newState);
     }
+
+    public void ChangeScene(GameScenes gameScenes)
+    {
+        SceneManager.LoadScene(gameScenes.ToString());
+    }
+
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().ToString()); 
+    }
+    #endregion
 }

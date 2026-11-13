@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e17e2143d2e99e44c9aa29ec48b27389, type: 3}
+  m_Name: Level 3.2
+  m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
+  levelName: Level 3.2
+  levelDesc: Desc
+  levelTargetScore: 400
+  levelMaxTurn: 20
+  levelMaxCluster: 2
+  levelBombPair: 1
+  levelSymbols:
+  - {fileID: 11400000, guid: dcf6a8cad4240c743a528fc5687f40c9, type: 2}
+  - {fileID: 11400000, guid: b4c6ace9c9aebae4f8e7a6b002b2c690, type: 2}
