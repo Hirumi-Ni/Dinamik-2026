@@ -22,6 +22,8 @@ public class BoardManager : MonoBehaviour
 
     private void Start()
     {
+        if (UpgradeManager.Instance != null) UpgradeManager.Instance.ResetStageTracker();
+
         if (GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
         {
             LevelDataSO data = GameManager.Instance.CurrentLevelData;

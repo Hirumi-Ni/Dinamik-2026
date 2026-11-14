@@ -24,6 +24,12 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            if (CurrentRun == null)
+            {
+                CurrentRun = new GameRunStateData(defaultMaxHP);
+                CurrentLevelData = startingLevelData;
+            }
         }
         else Destroy(gameObject);
     }
@@ -40,9 +46,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (CurrentRun == null)
+        if (SceneManager.GetActiveScene().name == GameScenes.StageScene.ToString())
         {
-            StartNewRun();
+            SetState(GameState.Match);
         }
     }
 
@@ -83,15 +89,16 @@ public class GameManager : MonoBehaviour
     {
         int baseReward = 25;
 
-        // Bonus dari sisa Turn (semakin hemat turn, semakin kaya)
+        // Sisa turn kali 5 token
         int remainingTurns = Mathf.Max(0, ScoreManager.Instance.remainingTurn);
         int turnBonus = remainingTurns * 5;
 
-        // Bonus dari skor yang melampaui Target
-        int excessScore = Mathf.Max(0, ScoreManager.Instance.GetTotalScore() - CurrentLevelData.levelTargetScore);
+        // Sisa target dibagi 5
+        int excessScore = ScoreManager.Instance.GetExcessScore();
         int scoreBonus = excessScore / 5;
 
-        return baseReward + turnBonus + scoreBonus;
+        int rawTokens = baseReward + turnBonus + scoreBonus;
+        return (UpgradeManager.Instance != null) ? UpgradeManager.Instance.CalculateFinalStageTokens(rawTokens, CurrentLevelCluster) : rawTokens;
     }
 
     #region [Currency & Shop Transaction Helpers]
@@ -123,8 +130,8 @@ public class GameManager : MonoBehaviour
         if (!TrySpendTokens(cost)) return false;
 
         CurrentRun.healPurchaseCount++;
-        CurrentRun.currentHP++;
-        GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
+
+        HealPlayer(1);
         return true;
     }
 
@@ -146,6 +153,7 @@ public class GameManager : MonoBehaviour
 
             case ShopItemType.PassiveBuff:
                 CurrentRun.ownedPassives.Add(item);
+                if (item.sealType == WaxSealType.Bloodstone) HealPlayer(2);
                 GameEventHandler.OnInventoryUpdated?.Invoke();
                 break;
 
@@ -157,7 +165,6 @@ public class GameManager : MonoBehaviour
 
         return true;
     }
-
     #endregion
 
     #region [Win & Lose Conditions]
@@ -168,8 +175,24 @@ public class GameManager : MonoBehaviour
 
         if (CurrentRun.currentHP <= 0)
         {
+            if (CurrentRun.HasSeal(WaxSealType.UndyingCovenant) && !CurrentRun.hasTriggeredUndyingThisStage)
+            {
+                CurrentRun.hasTriggeredUndyingThisStage = true;
+                CurrentRun.currentHP = 1;
+
+                GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
+
+                if (ScoreManager.Instance != null) ScoreManager.Instance.AddTurn(2);
+                return;
+            }
             SetState(GameState.GameOver);
         }
+    }
+
+    public void HealPlayer(int amount)
+    {
+        CurrentRun.currentHP++;
+        GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
     }
 
     public void EvaluateTurnLossCondition()
@@ -183,6 +206,7 @@ public class GameManager : MonoBehaviour
     public void HandleAllSafeCardsCleared()
     {
         if (CurrentState != GameState.Match) return;
+        if (UpgradeManager.Instance != null) UpgradeManager.Instance.OnClusterCleared();
 
         int maxCluster = (CurrentLevelData != null) ? CurrentLevelData.levelMaxCluster : 1;
 
@@ -195,6 +219,7 @@ public class GameManager : MonoBehaviour
             if (ScoreManager.Instance.IsTargetReached()) CompleteMatch();
             else SetState(GameState.GameOver);
         }
+
     }
 
     private IEnumerator TransitionToNextCluster(int maxCluster)

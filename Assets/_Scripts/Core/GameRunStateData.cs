@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class GameRunStateData
@@ -17,6 +18,12 @@ public class GameRunStateData
     public int crescentBonus = 0;
     public int ankhBonus = 0;
     public int lotusBonus = 0;
+    #endregion
+
+    #region [Persistent Seal Stacks & Flags]
+    public int crescendoStack = 0;
+    public int ouroborosStack = 0;
+    public bool hasTriggeredUndyingThisStage = false;
     #endregion
 
     #region [Item Inventory]
@@ -70,6 +77,20 @@ public class GameRunStateData
             case CardType.Lotus: return lotusBonus;
             default: return 0;
         }
+    }
+    public bool HasSeal(WaxSealType type)
+    {
+        foreach (var seal in ownedPassives)
+        {
+            if (seal != null && seal.sealType == type) return true;
+        }
+        return false;
+    }
+
+    public int GetEffectiveMaxHP()
+    {
+        int bonusHP = HasSeal(WaxSealType.Bloodstone) ? 2 : 0;
+        return maxHP + bonusHP;
     }
     #endregion
 }

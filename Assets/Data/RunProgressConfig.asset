@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: RunProgressConfig
   m_EditorClassIdentifier: Assembly-CSharp::RunProgressionDataSO
   stages:
-  - stageName: Stage 1 Setelah Shop Pertama Kali
+  - stageName: Stage 1 (Tutorial)
+    possibleLevels:
+    - {fileID: 11400000, guid: 287e195119140c64da6353d06834512f, type: 2}
+  - stageName: Stage 2
     possibleLevels:
     - {fileID: 11400000, guid: 2b88becdb64b827418ae899ead86b4c7, type: 2}
     - {fileID: 11400000, guid: 277b8466d4f4ea94c996c2fecc8761e9, type: 2}
-  - stageName: Stage 2
+  - stageName: Stage 3
     possibleLevels:
     - {fileID: 11400000, guid: 26d6c0903fcbe3f45a22abc22a2acc37, type: 2}
     - {fileID: 11400000, guid: 135b726a9726ca148b4a65e0bd8de1b4, type: 2}

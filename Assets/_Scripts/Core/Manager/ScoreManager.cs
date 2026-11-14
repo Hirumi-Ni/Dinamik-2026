@@ -34,16 +34,26 @@ public class ScoreManager : MonoBehaviour
 
     public void AddMatchScore(CardDataSO cardData)
     {
-        currentCombo++;
-        Debug.Log($"Combo: {currentCombo}");
-        int comboMultiplier = (int)Mathf.Pow(2, currentCombo - 1); //1x = 1 combo, 2x = 2 combo, 4x = 3 combo
+        bool hasUpgradeMgr = UpgradeManager.Instance != null;
+        GameRunStateData run = (GameManager.Instance != null) ? GameManager.Instance.CurrentRun : null;
 
-        int grimoireBonus = (GameManager.Instance != null && GameManager.Instance.CurrentRun != null) ? GameManager.Instance.CurrentRun.GetSymbolBonus(cardData.cardType): 0;
-        int grimoireBuffScore= cardData.cardBaseScore + grimoireBonus;
+        int comboGain = (run != null && run.HasSeal(WaxSealType.TwinEclipse) && cardData.cardType == CardType.Crescent) ? 2 : 1;
+        currentCombo += comboGain;
 
-        int addedScore = cardData.cardBaseScore * comboMultiplier;
+        int effectiveCardScore = hasUpgradeMgr ? UpgradeManager.Instance.GetEffectiveBaseScore(cardData) : cardData.cardBaseScore;
+        float matchMult = hasUpgradeMgr ? UpgradeManager.Instance.GetMatchMult(currentCombo) : Mathf.Pow(2, currentCombo - 1);
 
+        float matchAdditiveMult = 1.0f;
+        if (run != null && run.HasSeal(WaxSealType.TrinityCadence) && cardData.cardType == CardType.Triquetra && remainingTurn % 3 == 0)
+        {
+            matchAdditiveMult += 1.5f;
+        }
+
+        int addedScore = Mathf.RoundToInt(effectiveCardScore * matchMult * matchAdditiveMult);
         baseScore += addedScore;
+
+        if (hasUpgradeMgr) UpgradeManager.Instance.OnMatchResolved(cardData, currentCombo);
+
         NotifyScoreUpdate();
     }
 
@@ -56,8 +66,17 @@ public class ScoreManager : MonoBehaviour
     {
         remainingTurn--;
         Debug.Log($"Current Turn {remainingTurn}");
-
         if (remainingTurn < 0) remainingTurn = 0;
+
+        if (UpgradeManager.Instance != null) UpgradeManager.Instance.RegisterTurnAttempt();
+
+        GameEventHandler.OnTurnUpdated?.Invoke(remainingTurn);
+        NotifyScoreUpdate();
+    }
+
+    public void AddTurn(int amount)
+    {
+        remainingTurn += amount;
         GameEventHandler.OnTurnUpdated?.Invoke(remainingTurn);
         NotifyScoreUpdate();
     }
@@ -67,10 +86,28 @@ public class ScoreManager : MonoBehaviour
         int turnsUsed = maxTurn - remainingTurn;
         float usagePercentage = ((float)turnsUsed / maxTurn) * 100f;
 
-        if (usagePercentage <= 30f) return 3.0f; // Turn yang dipakai <= 30% -> 3x
-        if (usagePercentage <= 60f) return 2.0f; // Turn yang dipakai 31% - 60% -> 2x
-        if (usagePercentage <= 70f) return 1.0f; // Turn yang dipakai 61% - 70% -> 1x
-        return 0.5f; // Turn yang dipakai > 70% -> 0.5x
+        float baseTurnMult = 0.5f;
+        if (usagePercentage <= 30f) baseTurnMult = 3.0f; // <= 30% -> 3x
+        else if (usagePercentage <= 60f) baseTurnMult = 2.0f; // 31% - 60% -> 2x
+        else if (usagePercentage <= 70f) baseTurnMult = 1.0f; // 61% - 70% -> 1x
+
+        if (GameManager.Instance != null && GameManager.Instance.CurrentRun != null)
+        {
+            GameRunStateData run = GameManager.Instance.CurrentRun;
+
+            if (run.HasSeal(WaxSealType.GlassCannon))
+            {
+                int missingHP = Mathf.Max(0, run.GetEffectiveMaxHP() - run.currentHP);
+                baseTurnMult += missingHP * 0.75f;
+            }
+
+            if (run.HasSeal(WaxSealType.Ouroboros))
+            {
+                baseTurnMult += run.ouroborosStack * 0.15f;
+            }
+        }
+
+        return baseTurnMult;
     }
 
     public int GetTotalScore()

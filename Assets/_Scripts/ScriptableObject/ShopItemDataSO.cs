@@ -13,10 +13,11 @@ public class ShopItemDataSO : ScriptableObject
     [Header("Economy")]
     public int basePrice = 40;
 
-    [Header("Grimoire Config")]
+    [Header("Permanent Upgrade Config")]
     public GrimoireTarget grimoireTarget = GrimoireTarget.None;
     public int scoreBonusValue = 20;
 
-    [Header("Effect Value")]
+    [Header("Passive Upgrade Config")]
+    public WaxSealType sealType = WaxSealType.None;
     public float effectValue = 0f;
 }
