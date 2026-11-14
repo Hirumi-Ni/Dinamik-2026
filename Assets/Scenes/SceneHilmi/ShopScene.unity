@@ -1133,6 +1133,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1799362f0d31c9d4ab68aae8a3a51b75, type: 2}
   - {fileID: 11400000, guid: 139e932efb92673459cded6c348ac4e0, type: 2}
   - {fileID: 11400000, guid: 6324c58c6e36cf746b2fe126cf4d113d, type: 2}
+  - {fileID: 11400000, guid: 95601255000316c47ad425cf04f5cfa1, type: 2}
+  - {fileID: 11400000, guid: 78cac491057b7b347986fb8492715462, type: 2}
+  - {fileID: 11400000, guid: 138408a3511a35347969fd0021eafc35, type: 2}
+  - {fileID: 11400000, guid: af6ca3bcc088ed843b2abc4b590de4cb, type: 2}
+  - {fileID: 11400000, guid: b9d76262df7f91945badf4ef96e7e954, type: 2}
+  - {fileID: 11400000, guid: 2c3aab9ff95bbf446b7b862961b8856f, type: 2}
   consumablePool: []
   healBaseCost: 40
   healCostIncrement: 30
