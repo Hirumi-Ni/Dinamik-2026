@@ -20,5 +20,5 @@ MonoBehaviour:
   basePrice: 40
   grimoireTarget: 0
   scoreBonusValue: 0
-  sealType: 9
+  sealType: 7
   consumableType: 0

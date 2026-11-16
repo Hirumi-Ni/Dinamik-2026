@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd36129c0dcde6240b01061eb93c38ad, type: 3}
+  m_Name: ItemLens
+  m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
+  itemName: Lens
+  description: Peek at 3 random hidden cards for 1.5s.
+  icon: {fileID: 21300000, guid: 005888ede18a58e4db8d069cfa3007cb, type: 3}
+  type: 2
+  rarity: 0
+  basePrice: 40
+  grimoireTarget: 0
+  scoreBonusValue: 20
+  sealType: 0
+  consumableType: 1

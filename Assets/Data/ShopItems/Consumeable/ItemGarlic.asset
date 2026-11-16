@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: ItemGarlic
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Garlic
-  description: Ketika dipakai, menghapus 1 kartu bom yang aktif, jika tidak ada kartu
-    bom yang aktif, tandai 1 kartu bom.
+  description: Mark 1 hidden Bomb card on the board.
   icon: {fileID: 21300000, guid: 4cbbf7337aa794bf299ec0044983eef2, type: 3}
   type: 2
   rarity: 0

@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: ItemElixir
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Elixir
-  description: ' Ketika dipakai, selama 3 turn kedepan score yang diterima ketika
-    mendapatkan match (pencocokan) dikali 2x lipat.'
+  description: 'Double (2x) your Match Mult for the next 3 Turns. '
   icon: {fileID: 21300000, guid: bac66973cba57b842965eb95154fba7e, type: 3}
   type: 2
   rarity: 0

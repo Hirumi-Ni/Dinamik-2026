@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ItemHourglass
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Hour Glass
-  description: Ketika dipakai, menambah turn sejumlah 3.
+  description: Gain +3 Turns immediately.
   icon: {fileID: 21300000, guid: 0a08fa9ec51507e488400cee024073a7, type: 3}
   type: 2
   rarity: 0

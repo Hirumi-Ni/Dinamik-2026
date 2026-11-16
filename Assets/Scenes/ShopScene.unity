@@ -2325,8 +2325,18 @@ MonoBehaviour:
   runProgression: {fileID: 11400000, guid: a5c0c57ea85f93b49ab84262f55901e5, type: 2}
   passiveSealPool:
   - {fileID: 11400000, guid: bed0521bc54229740bc1fe2ad0ffaf9a, type: 2}
+  - {fileID: 11400000, guid: 8a247a736873bf04cb2aa0280eb96243, type: 2}
+  - {fileID: 11400000, guid: 5e63afe975c0e0748bf9c834697bf7a7, type: 2}
+  - {fileID: 11400000, guid: d3ceb7d4a14371548addf205f007dac6, type: 2}
+  - {fileID: 11400000, guid: abc114d089402b545b33e867db8d5ac7, type: 2}
   - {fileID: 11400000, guid: 77e84251697529d4fad6b80701af1fbc, type: 2}
+  - {fileID: 11400000, guid: a466a22fb05af2c4cb25c6e0195c8d96, type: 2}
+  - {fileID: 11400000, guid: ad6c3e1ce467b914988bc4e76dc0e3cf, type: 2}
+  - {fileID: 11400000, guid: 4842547be5c4b844283a778d7bad64d4, type: 2}
+  - {fileID: 11400000, guid: 6c66c9a97ac292043a36fa7363d09c05, type: 2}
+  - {fileID: 11400000, guid: bd01dc11d62439c4786ea471c67774fa, type: 2}
   - {fileID: 11400000, guid: f42642fb861798646afb511d3ad45349, type: 2}
+  - {fileID: 11400000, guid: 81a8194156a04624aa4642bed7508617, type: 2}
   grimoirePool:
   - {fileID: 11400000, guid: 5c639286731c2924eb93a0fa340b7338, type: 2}
   - {fileID: 11400000, guid: 8ca0d1c6a1b49224e8a20eda3b6ca9a4, type: 2}
