@@ -17,6 +17,7 @@ public static class GameEventHandler
     public static Action<int> OnTokenChanged; // (Current Token)
     public static Action<GameState> OnGameStateChanged;
     public static Action<int, int> OnClusterUpdated; // (Current Cluster, Max Cluster)
+    public static Action<int, int, int, int, int> OnStageSummaryTriggered; // (stageNumber, totalScore, targetScore, remainingTurns, currentLevelCluster)
     #endregion
 
     public static Action OnInventoryUpdated;

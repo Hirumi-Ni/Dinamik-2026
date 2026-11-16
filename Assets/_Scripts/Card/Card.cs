@@ -11,7 +11,7 @@ public class Card : MonoBehaviour
     [SerializeField] private Image cardIconImage;
     [SerializeField] private Sprite cardFrontViewBG;
     [SerializeField] private Sprite cardBackViewBG;
-    [SerializeField] private CanvasGroup cardCanvasGroup; 
+    [SerializeField] private CanvasGroup cardCanvasGroup;
 
     [Header("Bomb Warning")]
     [SerializeField] private GameObject bombWarningOverlay;
@@ -49,7 +49,6 @@ public class Card : MonoBehaviour
 
         cardBackgroundImage.color = Color.white;
         cardIconImage.sprite = CardData.cardIconSprite;
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
 
         ShowBack();
     }
@@ -80,20 +79,49 @@ public class Card : MonoBehaviour
         ShowBack();
     }
 
-    public void SetBombTriggered()
+    #region [Death Card States: Armed, Exploded, Defused]
+    public void SetBombArmed()
     {
         IsMatched = true;
         IsFlipped = true;
+        if (cardButton != null) cardButton.interactable = false;
+        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(false);
         if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
-        ShowFront();
 
-        cardBackgroundImage.color = Color.red;
+        ShowFront();
+        cardBackgroundImage.color = new Color(1f, 0.55f, 0f, 1f); 
     }
+
+    public void SetBombExploded()
+    {
+        IsMatched = true;
+        IsFlipped = true;
+        if (cardButton != null) cardButton.interactable = false;
+        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(false);
+        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
+
+        ShowFront();
+        cardBackgroundImage.color = Color.red; 
+    }
+
+    public void SetBombDefused()
+    {
+        IsMatched = true;
+        IsFlipped = true;
+        if (cardButton != null) cardButton.interactable = false;
+        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(false);
+        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 0.5f;
+
+        ShowFront();
+        cardBackgroundImage.color = Color.gray; // Abu-abu netral
+    }
+    #endregion
 
     public void SetMatched()
     {
         IsMatched = true;
         IsFlipped = true;
+        if (cardButton != null) cardButton.interactable = false;
         if (cardCanvasGroup != null) cardCanvasGroup.alpha = 0.5f;
     }
 

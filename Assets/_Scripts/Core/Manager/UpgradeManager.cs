@@ -99,7 +99,15 @@ public class UpgradeManager : MonoBehaviour
                 break;
 
             case ConsumableType.Garlic:
-                if (BoardManager.Instance != null) BoardManager.Instance.MarkOrDisarmBomb();
+                if (MatchManager.Instance != null && MatchManager.Instance.TryDefuseActiveDeathCard())
+                {
+                    break;
+                }
+
+                if (BoardManager.Instance != null)
+                {
+                    BoardManager.Instance.MarkOrDisarmBomb();
+                }
                 break;
 
             case ConsumableType.Elixir:

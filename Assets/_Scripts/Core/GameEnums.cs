@@ -1,5 +1,5 @@
 public enum GameState { MainMenu, Match, Shop, GameOver }
-public enum GameScenes { MainMenuScene, StageScene, ShopScene }
+public enum GameScenes { MainMenuScene, StageScene, ShopScene, GameOverScene }
 public enum CardType { Ankh, Triquetra, Lotus, Crescent, Bomb } //bomb = zonk
 public enum ShopItemType { PermanentBuff, PassiveBuff, Consumable }
 public enum ItemRarity { Dusty, Arcane, Eldritch } //common, rare, legend/mythic

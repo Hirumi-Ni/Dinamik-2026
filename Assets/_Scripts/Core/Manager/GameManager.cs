@@ -76,29 +76,36 @@ public class GameManager : MonoBehaviour
         if (CurrentState != GameState.Match) return;
         if (!ScoreManager.Instance.IsTargetReached()) return;
 
-        int reward = CalculateStageReward();
-        AddTokens(reward);
-
-        CurrentRun.currentStage++;
-        SetState(GameState.Shop);
-
-        ChangeScene(GameScenes.ShopScene);
+        ShowStageSummary();
     }
 
-    private int CalculateStageReward()
+    //private int CalculateStageReward()
+    //{
+    //    int baseReward = 25;
+
+    //    // Sisa turn kali 5 token
+    //    int remainingTurns = Mathf.Max(0, ScoreManager.Instance.remainingTurn);
+    //    int turnBonus = remainingTurns * 5;
+
+    //    // Sisa target dibagi 5
+    //    int excessScore = ScoreManager.Instance.GetExcessScore();
+    //    int scoreBonus = excessScore / 5;
+
+    //    int rawTokens = baseReward + turnBonus + scoreBonus;
+    //    return (UpgradeManager.Instance != null) ? UpgradeManager.Instance.CalculateFinalStageTokens(rawTokens, CurrentLevelCluster) : rawTokens;
+    //}
+
+    public void ShowStageSummary()
     {
-        int baseReward = 25;
+        if (CurrentState != GameState.Match) return;
+        if (MatchManager.Instance != null) MatchManager.Instance.SetInputLocked(true);
 
-        // Sisa turn kali 5 token
-        int remainingTurns = Mathf.Max(0, ScoreManager.Instance.remainingTurn);
-        int turnBonus = remainingTurns * 5;
+        int stageNum = CurrentRun.currentStage;
+        int totalScore = ScoreManager.Instance.GetTotalScore();
+        int targetScore = ScoreManager.Instance.targetScore;
+        int remTurns = ScoreManager.Instance.remainingTurn;
 
-        // Sisa target dibagi 5
-        int excessScore = ScoreManager.Instance.GetExcessScore();
-        int scoreBonus = excessScore / 5;
-
-        int rawTokens = baseReward + turnBonus + scoreBonus;
-        return (UpgradeManager.Instance != null) ? UpgradeManager.Instance.CalculateFinalStageTokens(rawTokens, CurrentLevelCluster) : rawTokens;
+        GameEventHandler.OnStageSummaryTriggered?.Invoke(stageNum, totalScore, targetScore, remTurns, CurrentLevelCluster);
     }
 
     #region [Currency & Shop Transaction Helpers]
@@ -185,7 +192,9 @@ public class GameManager : MonoBehaviour
                 if (ScoreManager.Instance != null) ScoreManager.Instance.AddTurn(2);
                 return;
             }
+
             SetState(GameState.GameOver);
+            ChangeScene(GameScenes.GameOverScene);
         }
     }
 
@@ -197,9 +206,9 @@ public class GameManager : MonoBehaviour
 
     public void EvaluateTurnLossCondition()
     {
-        if (ScoreManager.Instance.remainingTurn <= 0 && !ScoreManager.Instance.IsTargetReached())
+        if (ScoreManager.Instance.remainingTurn <= 0)
         {
-            SetState(GameState.GameOver);
+            ShowStageSummary();
         }
     }
 
@@ -216,10 +225,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (ScoreManager.Instance.IsTargetReached()) CompleteMatch();
-            else SetState(GameState.GameOver);
+            ShowStageSummary();
         }
-
     }
 
     private IEnumerator TransitionToNextCluster(int maxCluster)

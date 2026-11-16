@@ -1,16 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MatchManager : MonoBehaviour
 {
     public static MatchManager Instance { get; private set; }
 
-    #region [Checker Helpers]
-    private List<Card> selectedCards = new List<Card>();
-    private bool isBombActive = false;
-    private bool isProcessMatch = false;
-    #endregion
+    private Card firstSelectedCard;
+    private Card secondSelectedCard;
+    private Card activeDeathCard;
+
+    private bool isCheckingMatch = false;
+    private bool isInputLocked = false;
 
     private void Awake()
     {
@@ -18,162 +18,147 @@ public class MatchManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        ResetMatchState();
+    }
+
     public void ResetMatchState()
     {
-        selectedCards.Clear();
-        isBombActive = false;
-        isProcessMatch = false;
+        firstSelectedCard = null;
+        secondSelectedCard = null;
+        activeDeathCard = null;
+        isCheckingMatch = false;
+        isInputLocked = false;
     }
 
-    public void OnCardClicked(Card clickedCard)
+    public void SetInputLocked(bool locked)
     {
-        if (GameManager.Instance.CurrentState != GameState.Match) return;
-        if (isProcessMatch || clickedCard.IsFlipped || clickedCard.IsMatched) return;
+        isInputLocked = locked;
+    }
 
-        clickedCard.FlipOpen();
-        selectedCards.Add(clickedCard);
-        GameEventHandler.OnCardFlipped?.Invoke(clickedCard);
+    public void OnCardClicked(Card card)
+    {
+        if (isInputLocked || isCheckingMatch || card == null || card.IsFlipped || card.IsMatched) return;
 
-        if (selectedCards.Count == 1) 
+        card.FlipOpen();
+
+        if (firstSelectedCard == null && card.CardData.cardType == CardType.Bomb)
         {
-            if (clickedCard.CardData.isBomb) isBombActive = true;
+            ActivateNewDeathCard(card);
+            ScoreManager.Instance.ResetCombo();
+            GameEventHandler.OnMatchFailed?.Invoke();
             return;
         }
 
-        if (selectedCards.Count == 2)
+        if (firstSelectedCard == null)
         {
-            if (selectedCards[0].CardData.isBomb && selectedCards[1].CardData.isBomb)
-            {
-                StartCoroutine(ProcessTwoBombsMatch());
-            }
-            else if (!selectedCards[0].CardData.isBomb && selectedCards[1].CardData.isBomb)
-            {
-                StartCoroutine(ProcessNormalThenBomb());
-            }
-            else if (!isBombActive)
-            {
-                StartCoroutine(ProcessNormalMatch());
-            }
+            firstSelectedCard = card;
             return;
         }
 
-        if (selectedCards.Count == 3 && isBombActive)
-        {
-            StartCoroutine(ProcessBombRescue());
-        }
+        // KASUS 3: Klik Kedua
+        secondSelectedCard = card;
+        StartCoroutine(CheckMatchRoutine());
     }
 
-    private IEnumerator ProcessNormalMatch()
+    private IEnumerator CheckMatchRoutine()
     {
-        isProcessMatch = true;
+        isCheckingMatch = true;
         yield return new WaitForSeconds(0.5f);
 
-        Card cardA = selectedCards[0];
-        Card cardB = selectedCards[1];
-
-        if (cardA.CardData.cardType == cardB.CardData.cardType)
+        if (secondSelectedCard.CardData.cardType == CardType.Bomb)
         {
-            ScoreManager.Instance.AddMatchScore(cardA.CardData);
-            cardA.SetMatched();
-            cardB.SetMatched();
-            GameEventHandler.OnMatchSuccess?.Invoke(cardA.CardData, ScoreManager.Instance.currentCombo);
+            ActivateNewDeathCard(secondSelectedCard);
+            firstSelectedCard.FlipClose();
+
+            ScoreManager.Instance.ResetCombo();
+            GameEventHandler.OnMatchFailed?.Invoke();
+
+            ScoreManager.Instance.RegisterTurn();
+            if (GameManager.Instance.CurrentState == GameState.Match)
+            {
+                GameManager.Instance.EvaluateTurnLossCondition();
+            }
+        }
+        else if (firstSelectedCard.CardData.cardType == secondSelectedCard.CardData.cardType)
+        {
+            firstSelectedCard.SetMatched();
+            secondSelectedCard.SetMatched();
+
+            if (activeDeathCard != null)
+            {
+                activeDeathCard.SetBombDefused();
+                activeDeathCard = null;
+            }
+
+            ScoreManager.Instance.RegisterTurn();
+            ScoreManager.Instance.AddMatchScore(firstSelectedCard.CardData);
+
+            if (BoardManager.Instance.AllSafeCardMatched())
+            {
+                activeDeathCard = null;
+                GameManager.Instance.HandleAllSafeCardsCleared();
+            }
+            else
+            {
+                GameManager.Instance.EvaluateTurnLossCondition();
+            }
         }
         else
         {
+            firstSelectedCard.FlipClose();
+            secondSelectedCard.FlipClose();
+
+            if (activeDeathCard != null)
+            {
+                DetonateActiveDeathCard();
+            }
+
             ScoreManager.Instance.ResetCombo();
-            cardA.FlipClose();
-            cardB.FlipClose();
             GameEventHandler.OnMatchFailed?.Invoke();
+
+            ScoreManager.Instance.RegisterTurn();
+            if (GameManager.Instance.CurrentState == GameState.Match)
+            {
+                GameManager.Instance.EvaluateTurnLossCondition();
+            }
         }
 
-        EndAttempt();
+        firstSelectedCard = null;
+        secondSelectedCard = null;
+        isCheckingMatch = false;
     }
 
-    private IEnumerator ProcessNormalThenBomb()
+    private void ActivateNewDeathCard(Card newDeathCard)
     {
-        isProcessMatch = true;
-        yield return new WaitForSeconds(0.5f);
+        if (activeDeathCard != null)
+        {
+            DetonateActiveDeathCard();
+        }
 
-        Card normalCard = selectedCards[0];
-        Card bombCard = selectedCards[1];
+        if (GameManager.Instance.CurrentState != GameState.Match) return;
 
-        normalCard.FlipClose();
-
-        selectedCards.Clear();
-        selectedCards.Add(bombCard);
-
-        isBombActive = true;
-        isProcessMatch = false;
-
-        ScoreManager.Instance.RegisterTurn();
-        GameManager.Instance.EvaluateTurnLossCondition();
+        activeDeathCard = newDeathCard;
+        activeDeathCard.SetBombArmed();
     }
 
-    private IEnumerator ProcessTwoBombsMatch()
+    private void DetonateActiveDeathCard()
     {
-        isProcessMatch = true;
-        yield return new WaitForSeconds(0.5f);
+        if (activeDeathCard == null) return;
 
-        ScoreManager.Instance.ResetCombo();
-        selectedCards[0].SetBombTriggered();
-        selectedCards[1].SetBombTriggered();
+        activeDeathCard.SetBombExploded();
+        activeDeathCard = null;
 
         GameEventHandler.OnBombTriggered?.Invoke();
-        isBombActive = false;
-
-        EndAttempt();
     }
 
-    private IEnumerator ProcessBombRescue()
+    public bool TryDefuseActiveDeathCard()
     {
-        isProcessMatch = true;
-        yield return new WaitForSeconds(0.5f);
+        if (activeDeathCard == null) return false;
 
-        Card bombCard = selectedCards[0];
-        Card cardB = selectedCards[1];
-        Card cardC = selectedCards[2];
-
-        if (cardB.CardData.cardType == cardC.CardData.cardType)
-        {
-            ScoreManager.Instance.AddMatchScore(cardB.CardData);
-            cardB.SetMatched();
-            cardC.SetMatched();
-
-            bombCard.SetMatched(); 
-            GameEventHandler.OnBombNeutralized?.Invoke();
-        }
-        else
-        {
-            ScoreManager.Instance.ResetCombo();
-            bombCard.SetBombTriggered(); 
-
-            cardB.FlipClose();
-            cardC.FlipClose();
-
-            GameEventHandler.OnBombTriggered?.Invoke();
-        }
-
-        isBombActive = false;
-        EndAttempt();
-    }
-
-    private void EndAttempt()
-    {
-        ScoreManager.Instance.RegisterTurn(); 
-        selectedCards.Clear();
-        isProcessMatch = false;
-
-        if (BoardManager.Instance.AllSafeCardMatched())
-        {
-            GameManager.Instance.HandleAllSafeCardsCleared();
-            return;
-        }
-
-        GameManager.Instance.EvaluateTurnLossCondition();
-    }
-
-    public void SetInputLocked(bool isLocked)
-    {
-        isProcessMatch = isLocked;
+        activeDeathCard.SetBombDefused();
+        activeDeathCard = null;
+        return true;
     }
 }
