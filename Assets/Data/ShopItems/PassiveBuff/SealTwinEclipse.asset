@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: SealTwinEclipse
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Twin Eclipse Seal
-  description: Match Crescent, combo langsung tambah 2, bukan 1 spt biasanya
+  description: Crescent matches grant +2 bonus Combo.
   icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
-  type: 2
+  type: 1
   rarity: 0
   basePrice: 40
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 9
-  effectValue: 2
+  consumableType: 0

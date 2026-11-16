@@ -252,4 +252,40 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().ToString()); 
     }
     #endregion
+
+    #region [Item & Sells]
+    public void SellOwnedItem(ShopItemDataSO item, bool isConsumable)
+    {
+        if (item == null || CurrentRun == null) return;
+
+        bool removed = isConsumable ? CurrentRun.ownedConsumables.Remove(item) : CurrentRun.ownedPassives.Remove(item);
+
+        if (removed)
+        {
+            int refund = Mathf.FloorToInt(item.basePrice * 0.5f);
+            AddTokens(refund);
+
+            if (!isConsumable && item.sealType == WaxSealType.Bloodstone)
+            {
+                CurrentRun.currentHP = Mathf.Min(CurrentRun.currentHP, CurrentRun.GetEffectiveMaxHP());
+                GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
+            }
+
+            GameEventHandler.OnInventoryUpdated?.Invoke();
+        }
+    }
+
+    public void UseConsumable(int slotIndex)
+    {
+        if (CurrentRun == null || slotIndex < 0 || slotIndex >= CurrentRun.ownedConsumables.Count) return;
+
+        ShopItemDataSO consumable = CurrentRun.ownedConsumables[slotIndex];
+        if (consumable == null) return;
+
+        if (UpgradeManager.Instance != null) UpgradeManager.Instance.ActivateConsumable(consumable);
+
+        CurrentRun.ownedConsumables.RemoveAt(slotIndex);
+        GameEventHandler.OnInventoryUpdated?.Invoke();
+    }
+    #endregion
 }

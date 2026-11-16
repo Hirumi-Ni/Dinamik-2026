@@ -1,7 +1,7 @@
 public enum GameState { MainMenu, Match, Shop, GameOver }
 public enum GameScenes { MainMenuScene, StageScene, ShopScene }
 public enum CardType { Ankh, Triquetra, Lotus, Crescent, Bomb } //bomb = zonk
-public enum ShopItemType { Heal, PermanentBuff, PassiveBuff, Consumable }
+public enum ShopItemType { PermanentBuff, PassiveBuff, Consumable }
 public enum ItemRarity { Dusty, Arcane, Eldritch } //common, rare, legend/mythic
 public enum GrimoireTarget { None, Triquetra, Crescent, Ankh, Lotus, Covenant }
 public enum WaxSealType
@@ -20,4 +20,12 @@ public enum WaxSealType
     TrinityCadence, // match Triquetra, saat turn kelipatan 3, +1.5 mult
     SereneLotus, // match Lotus ketika hp full turn +1 (tdk berkurang)
     Ouroboros, // tiap cluster habis, +20 base score & +0.15 base mult permanen
+}
+public enum ConsumableType
+{
+    None,
+    Lens, // Intip 3 kartu random selama 1.5 detik
+    Hourglass, // +3 Turn
+    Garlic, // Tandai/netralkan 1 kartu bom aktif
+    Elixir // 2x Match Mult selama 3 turn ke depan
 }

@@ -3,11 +3,17 @@ using UnityEngine;
 public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance { get; private set; }
+
     public int turnsTakenInStage { get; private set; } = 0;
+    public int elixirRemainingTurns { get; private set; } = 0;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         else Destroy(gameObject);
     }
 
@@ -16,25 +22,28 @@ public class UpgradeManager : MonoBehaviour
     public void ResetStageTracker()
     {
         turnsTakenInStage = 0;
+        elixirRemainingTurns = 0;
         if (Run != null) Run.hasTriggeredUndyingThisStage = false;
     }
 
     public void RegisterTurnAttempt()
     {
         turnsTakenInStage++;
+
+        if (elixirRemainingTurns > 0) elixirRemainingTurns--;
     }
 
     public int GetEffectiveBaseScore(CardDataSO card)
     {
-        int score = card.cardBaseScore = Run.GetSymbolBonus(card.cardType);
+        int score = card.cardBaseScore + Run.GetSymbolBonus(card.cardType);
 
         if (Run.HasSeal(WaxSealType.Crescendo)) score += Run.crescendoStack * 50;
-        if (Run.HasSeal(WaxSealType.Ouroboros)) score += Run.crescendoStack * 20;
+        if (Run.HasSeal(WaxSealType.Ouroboros)) score += Run.ouroborosStack * 20;
 
         return score;
     }
 
-    public float GetEffectiveBaseMult(float turnMult, CardDataSO card, int remainingturn)
+    public float GetEffectiveBaseMult(float turnMult, CardDataSO card, int remainingTurn)
     {
         float baseMult = turnMult;
 
@@ -44,7 +53,7 @@ public class UpgradeManager : MonoBehaviour
             baseMult += missingHP * 0.75f;
         }
 
-        if (Run.HasSeal(WaxSealType.TrinityCadence) && card.cardType == CardType.Triquetra && remainingturn % 3 == 0)
+        if (Run.HasSeal(WaxSealType.TrinityCadence) && card.cardType == CardType.Triquetra && remainingTurn % 3 == 0)
         {
             baseMult += 1.5f;
         }
@@ -64,10 +73,39 @@ public class UpgradeManager : MonoBehaviour
         if (Run.HasSeal(WaxSealType.FirstBlood))
         {
             if (turnsTakenInStage == 0) mult *= 3.0f;
-            else if (turnsTakenInStage == 1) mult *= 2.0f; 
+            else if (turnsTakenInStage == 1) mult *= 2.0f;
+        }
+
+        if (elixirRemainingTurns > 0)
+        {
+            mult *= 2.0f;
         }
 
         return mult;
+    }
+
+    public void ActivateConsumable(ShopItemDataSO item)
+    {
+        if (item == null) return;
+
+        switch (item.consumableType)
+        {
+            case ConsumableType.Lens:
+                if (BoardManager.Instance != null) BoardManager.Instance.PeekRandomCards(3, 1.5f);
+                break;
+
+            case ConsumableType.Hourglass:
+                if (ScoreManager.Instance != null) ScoreManager.Instance.AddTurn(3);
+                break;
+
+            case ConsumableType.Garlic:
+                if (BoardManager.Instance != null) BoardManager.Instance.MarkOrDisarmBomb();
+                break;
+
+            case ConsumableType.Elixir:
+                elixirRemainingTurns = 3;
+                break;
+        }
     }
 
     public void OnMatchResolved(CardDataSO card, int newCombo)
@@ -76,7 +114,7 @@ public class UpgradeManager : MonoBehaviour
 
         if (Run.HasSeal(WaxSealType.AnkhBlessing) && card.cardType == CardType.Ankh)
         {
-            int bonusTokens = Run.currentTokens / 10;
+            int bonusTokens = Run.currentTokens / 15;
             if (bonusTokens > 0) GameManager.Instance.AddTokens(bonusTokens);
         }
 
@@ -114,10 +152,13 @@ public class UpgradeManager : MonoBehaviour
         switch (item.sealType)
         {
             case WaxSealType.Crescendo:
-                return $"{item.description}\n<color=#FFD700>(Currently: +{Run.crescendoStack * 50} Base Score)</color>";
+                int crescendoBonus = Run.crescendoStack * 50;
+                return $"{item.description}\n(Currently: +{crescendoBonus} Base Score)";
 
             case WaxSealType.Ouroboros:
-                return $"{item.description}\n<color=#FFD700>(Currently: +{Run.ouroborosStack * 20} Score, +{Run.ouroborosStack * 0.15f:0.00}x Mult)</color>";
+                int ouroScore = Run.ouroborosStack * 20;
+                float ouroMult = Run.ouroborosStack * 0.15f;
+                return $"{item.description}\n(Currently: +{ouroMult:0.##}x Base Mult, +{ouroScore} Base Score)";
 
             default:
                 return item.description;

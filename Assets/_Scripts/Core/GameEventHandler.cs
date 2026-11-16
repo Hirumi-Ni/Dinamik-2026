@@ -20,4 +20,8 @@ public static class GameEventHandler
     #endregion
 
     public static Action OnInventoryUpdated;
+    public static Action<ShopItemDataSO> OnItemTooltipShow;
+    public static Action OnItemTooltipHide;
+    public static Action OnCloseAllSellPopups;
+    public static Action OnSigilStatsUpdated;
 }

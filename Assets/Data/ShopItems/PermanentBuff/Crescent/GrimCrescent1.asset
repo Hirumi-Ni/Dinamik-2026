@@ -15,9 +15,10 @@ MonoBehaviour:
   itemName: Dusty Crescent Grimoire
   description: Permanently Increase Crescent Card Value by 20.
   icon: {fileID: 21300000, guid: c55b05e1736659849a898c2e9905a6a0, type: 3}
-  type: 1
+  type: 0
   rarity: 0
   basePrice: 40
   grimoireTarget: 2
   scoreBonusValue: 20
-  effectValue: 0
+  sealType: 0
+  consumableType: 0

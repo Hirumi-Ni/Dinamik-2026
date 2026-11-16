@@ -15,9 +15,10 @@ MonoBehaviour:
   itemName: Arcane Triquetra Grimoire
   description: Permanently Increase Triquetra Card Value by 50.
   icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
-  type: 1
+  type: 0
   rarity: 1
   basePrice: 70
   grimoireTarget: 1
   scoreBonusValue: 50
-  effectValue: 0
+  sealType: 0
+  consumableType: 0

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: SealFortune
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Fortune Seal
-  description: 40% Token yang didapat
+  description: Gain +40% bonus Tokens upon clearing a stage.
   icon: {fileID: 21300000, guid: eeeb98c0445060a44895c2b15fa2d04d, type: 3}
-  type: 2
+  type: 1
   rarity: 0
   basePrice: 40
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 1
-  effectValue: 0.4
+  consumableType: 0

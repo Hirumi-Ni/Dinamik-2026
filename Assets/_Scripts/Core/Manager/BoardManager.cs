@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -45,6 +46,14 @@ public class BoardManager : MonoBehaviour
         PopulateBoard(deck);
 
         MatchManager.Instance.ResetMatchState();
+
+        if (GameManager.Instance != null && GameManager.Instance.CurrentRun != null)
+        {
+            if (GameManager.Instance.CurrentRun.HasSeal(WaxSealType.EyeOfHorus))
+            {
+                StartCoroutine(EyeOfHorusPeek());
+            }
+        }
     }
 
     private void ClearBoard()
@@ -63,7 +72,7 @@ public class BoardManager : MonoBehaviour
 
         int bombPairs = (levelData != null) ? levelData.levelBombPair : 1;
         int totalBombCards = bombPairs * 2;
-        int totalSigilCards = 12 - totalBombCards; 
+        int totalSigilCards = 12 - totalBombCards;
         int sigilPairs = totalSigilCards / 2;
 
         List<CardDataSO> symbolList = (levelData != null && levelData.levelSymbols.Count > 0) ? levelData.levelSymbols : cardDefaultData;
@@ -115,5 +124,53 @@ public class BoardManager : MonoBehaviour
             if (!card.CardData.isBomb && !card.IsMatched) return false;
         }
         return true;
+    }
+
+    private IEnumerator EyeOfHorusPeek()
+    {
+        yield return new WaitForSeconds(0.3f);
+        PeekRandomCards(2, 1.0f);
+    }
+
+    public void PeekRandomCards(int count, float duration)
+    {
+        if (activeCard == null || activeCard.Count == 0) return;
+
+        List<Card> closedCards = new List<Card>();
+        foreach (var card in activeCard)
+        {
+            if (card != null && !card.IsFlipped && !card.IsMatched && !card.IsMarkedBomb)
+            {
+                closedCards.Add(card);
+            }
+        }
+
+        int actualCount = Mathf.Min(count, activeCard.Count);
+        for (int i = 0; i < actualCount; i++)
+        {
+            int randIdx = Random.Range(0, activeCard.Count);
+            activeCard[randIdx].Peek(duration);
+            activeCard.RemoveAt(randIdx);
+        }
+    }
+
+    public void MarkOrDisarmBomb()
+    {
+        if (activeCard == null || activeCard.Count == 0) return;
+
+        List<Card> hiddenBombs = new List<Card>();
+        foreach (var card in activeCard)
+        {
+            if (card != null && card.CardData.cardType == CardType.Bomb && !card.IsFlipped && !card.IsMarkedBomb)
+            {
+                hiddenBombs.Add(card);
+            }
+        }
+
+        if (hiddenBombs.Count > 0)
+        {
+            int randIdx = Random.Range(0, hiddenBombs.Count);
+            hiddenBombs[randIdx].MarkAsBomb();
+        }
     }
 }
