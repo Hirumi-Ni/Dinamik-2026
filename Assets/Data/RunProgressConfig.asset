@@ -40,4 +40,4 @@ MonoBehaviour:
     - {fileID: 11400000, guid: d3247ff1c4d051d4d997d882e7f14cef, type: 2}
   - stageName: Stage 6
     possibleLevels:
-    - {fileID: 11400000, guid: 305461386d062444cbd33f558b02ca7b, type: 2}
+    - {fileID: 11400000, guid: 26d6c0903fcbe3f45a22abc22a2acc37, type: 2}
