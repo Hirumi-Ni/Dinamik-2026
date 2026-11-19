@@ -1411,7 +1411,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bff02d7da472bbe47b53653a1b9535f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
-  debugForceWaxSeal: {fileID: 11400000, guid: eb71e0b1dc52fba49ae006e0979252b6, type: 2}
+  debugForceWaxSeal: {fileID: 0}
   runProgression: {fileID: 11400000, guid: a5c0c57ea85f93b49ab84262f55901e5, type: 2}
   passiveSealPool:
   - {fileID: 11400000, guid: bed0521bc54229740bc1fe2ad0ffaf9a, type: 2}
@@ -4864,7 +4864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681c7be9859bf484f9abe3ac1a8f5fd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  transitionMode: {fileID: 0}
+  transitionMode: {fileID: 11400000, guid: 5d42ad7319df4a8439d74d82f30a60cc, type: 2}
   defaultMaxHP: 3
   startingLevelData: {fileID: 11400000, guid: 287e195119140c64da6353d06834512f, type: 2}
   maxPassiveSlot: 4
