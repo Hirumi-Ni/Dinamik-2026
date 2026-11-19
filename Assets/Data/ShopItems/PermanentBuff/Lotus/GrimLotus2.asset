@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Arcane Lotus Grimoire
   description: Permanently gain +45 Base Score for Lotus cards.
-  icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
+  icon: {fileID: 2144355899712600083, guid: d79c1d6fecd35d2429d75c18bfbb0ab7, type: 3}
   type: 0
   rarity: 1
   basePrice: 30
