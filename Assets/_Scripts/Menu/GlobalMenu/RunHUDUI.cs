@@ -40,4 +40,9 @@ public class RunHUDUI : MonoBehaviour
             if (lifeIcons[i] != null) lifeIcons[i].SetActive(i < hp);
         }
     }
+
+    public void ReturnToMainMenuButton()
+    {
+        GameManager.Instance.ChangeScene(GameScenes.MainMenuScene);
+    }
 }

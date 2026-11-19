@@ -25,4 +25,5 @@ public static class GameEventHandler
     public static Action OnItemTooltipHide;
     public static Action OnCloseAllSellPopups;
     public static Action OnSigilStatsUpdated;
+    public static Action<WaxSealType> OnWaxSealTriggered;
 }

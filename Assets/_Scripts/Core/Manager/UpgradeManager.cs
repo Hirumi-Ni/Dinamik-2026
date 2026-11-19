@@ -37,9 +37,15 @@ public class UpgradeManager : MonoBehaviour
     {
         int score = card.cardBaseScore + Run.GetSymbolBonus(card.cardType);
 
-        if (Run.HasSeal(WaxSealType.Crescendo)) score += Run.crescendoStack * 50;
-        if (Run.HasSeal(WaxSealType.Ouroboros)) score += Run.ouroborosStack * 20;
-
+        if (Run.HasSeal(WaxSealType.Crescendo))
+        {
+            score += Run.crescendoStack * 50;
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.Crescendo);
+        }
+        if (Run.HasSeal(WaxSealType.Ouroboros))
+        {
+            score += Run.ouroborosStack * 20;
+        }
         return score;
     }
 
@@ -53,11 +59,13 @@ public class UpgradeManager : MonoBehaviour
         {
             int missingHP = Mathf.Max(0, Run.GetEffectiveMaxHP() - Run.currentHP);
             baseMult += missingHP * 0.75f;
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.GlassCannon);
         }
 
         if (Run.HasSeal(WaxSealType.Ouroboros))
         {
             baseMult += Run.ouroborosStack * 0.15f;
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.Ouroboros);
         }
 
         return baseMult;
@@ -69,8 +77,16 @@ public class UpgradeManager : MonoBehaviour
 
         if (Run != null && Run.HasSeal(WaxSealType.FirstBlood))
         {
-            if (turnsTakenInStage == 1) mult *= 3.0f;
-            else if (turnsTakenInStage == 2) mult *= 2.0f;
+            if (turnsTakenInStage == 1)
+            {
+                mult *= 3.0f;
+                GameEventHandler.OnWaxSealTriggered(WaxSealType.FirstBlood);
+            }
+            else if (turnsTakenInStage == 2)
+            {
+                mult *= 2.0f;
+                GameEventHandler.OnWaxSealTriggered(WaxSealType.FirstBlood);
+            }
         }
 
         if (elixirRemainingTurns > 0)
@@ -120,11 +136,16 @@ public class UpgradeManager : MonoBehaviour
         {
             int bonusTokens = Run.currentTokens / 15;
             if (bonusTokens > 0) GameManager.Instance.AddTokens(bonusTokens);
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.AnkhBlessing);
         }
 
         if (Run.HasSeal(WaxSealType.SereneLotus) && card.cardType == CardType.Lotus)
         {
-            if (Run.currentHP >= Run.GetEffectiveMaxHP()) ScoreManager.Instance.AddTurn(1);
+            if (Run.currentHP >= Run.GetEffectiveMaxHP())
+            {
+                ScoreManager.Instance.AddTurn(1);
+                GameEventHandler.OnWaxSealTriggered(WaxSealType.SereneLotus);
+            }
         }
     }
 
@@ -141,10 +162,15 @@ public class UpgradeManager : MonoBehaviour
         {
             total += 30;
             GameManager.Instance.HealPlayer(1);
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.SwiftExecution);
         }
 
-        if (Run.HasSeal(WaxSealType.Fortune)) total = Mathf.CeilToInt(total * 1.4f);
+        if (Run.HasSeal(WaxSealType.Fortune))
+        {
+            total = Mathf.CeilToInt(total * 1.4f);
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.SwiftExecution);
 
+        }
         return total;
     }
 

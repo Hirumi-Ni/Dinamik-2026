@@ -104,7 +104,7 @@ public class MatchSummaryUI : MonoBehaviour
 
         if (isStageCleared)
         {
-            if (GameManager.Instance.CurrentRun.currentStage >= 3)
+            if (GameManager.Instance.CurrentRun.currentStage >= 6)
             {
                 GameManager.Instance.ChangeScene(GameScenes.GameOverScene);
                 return;
