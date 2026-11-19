@@ -46,6 +46,8 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         isDealing = true;
         if (cardButton != null) cardButton.interactable = false;
 
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Card3);
+
         if (cardView != null)
         {
             cardView.PlayDeal(deckWorldOrigin, delay, () =>
@@ -92,6 +94,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         IsFlipped = true;
         cardView?.PlayFlip(showFrontSide: true);
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Card2);
     }
 
     public void FlipClose()
@@ -114,6 +117,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         IsFlipped = true;
         if (cardButton != null) cardButton.interactable = false;
         cardView?.SetBombArmedVisual();
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Burn);
     }
 
     public void SetBombExploded()
@@ -122,6 +126,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         IsFlipped = true;
         if (cardButton != null) cardButton.interactable = false;
         cardView?.SetBombExplodedVisual();
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_GlassBreaking);
     }
 
     public void SetBombDefused()
@@ -130,6 +135,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
         IsFlipped = true;
         if (cardButton != null) cardButton.interactable = false;
         cardView?.SetBombDefusedVisual();
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_FireExtinguished2);
     }
     #endregion
 
@@ -144,6 +150,7 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     {
         IsMarkedBomb = true;
         cardView?.ShowMarkedBombVisual();
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_FireExtinguished2);
     }
     #endregion
 }

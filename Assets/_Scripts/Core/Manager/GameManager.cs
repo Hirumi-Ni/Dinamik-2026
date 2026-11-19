@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public LevelDataSO CurrentLevelData { get; private set; }
     public int CurrentLevelCluster { get; private set; } = 1;
     public GameState CurrentState { get; private set; }
+    public bool shouldShowTutorial = false;
 
     [SerializeField] private int maxPassiveSlot = 4;
     [SerializeField] private int maxConsumableSlot = 2;
@@ -57,6 +58,8 @@ public class GameManager : MonoBehaviour
 
     public void StartNewRun()
     {
+        shouldShowTutorial = true; 
+
         CurrentRun = new GameRunStateData(defaultMaxHP);
         CurrentLevelCluster = 1;
         CurrentLevelData = startingLevelData;
@@ -128,6 +131,7 @@ public class GameManager : MonoBehaviour
     {
         if (CurrentRun.currentHP >= CurrentRun.maxHP) return false;
 
+        AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_WaterPouring);
         int cost = GetCurrentHealCost(baseCost, increment);
         if (!TrySpendTokens(cost)) return false;
 
@@ -151,17 +155,20 @@ public class GameManager : MonoBehaviour
         {
             case ShopItemType.PermanentBuff:
                 CurrentRun.AddSymbolBonus(item.grimoireTarget, item.scoreBonusValue);
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_BookFlip);
                 break;
 
             case ShopItemType.PassiveBuff:
                 CurrentRun.ownedPassives.Add(item);
                 if (item.sealType == WaxSealType.Bloodstone) HealPlayer(2);
                 GameEventHandler.OnInventoryUpdated?.Invoke();
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Stamp);
                 break;
 
             case ShopItemType.Consumable:
                 CurrentRun.ownedConsumables.Add(item);
                 GameEventHandler.OnInventoryUpdated?.Invoke();
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_CorrectPair);
                 break;
         }
 
@@ -179,6 +186,7 @@ public class GameManager : MonoBehaviour
         {
             if (CurrentRun.HasSeal(WaxSealType.UndyingCovenant) && !CurrentRun.hasTriggeredUndyingThisStage)
             {
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Shine); //nitip ntar ganti bell
                 CurrentRun.hasTriggeredUndyingThisStage = true;
                 CurrentRun.currentHP = 1;
 
@@ -246,7 +254,8 @@ public class GameManager : MonoBehaviour
 
     public void ChangeScene(GameScenes gameScenes)
     {
-        TransitionManager.Instance().Transition(gameScenes.ToString(), transitionMode, 0f);
+        SceneManager.LoadScene(gameScenes.ToString());
+        //TransitionManager.Instance().Transition(gameScenes.ToString(), transitionMode, 0f);
     }
 
     public void RestartScene()

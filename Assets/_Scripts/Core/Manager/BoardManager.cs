@@ -21,9 +21,10 @@ public class BoardManager : MonoBehaviour
     [SerializeField] private CardDataSO bombData;
     private List<Card> activeCard = new List<Card>();
 
-    [Header("Deal Animation")]
-    [SerializeField] private RectTransform deckSpawnPoint; 
+    [Header("Deal Animation & Tutorial")]
+    [SerializeField] private RectTransform deckSpawnPoint;
     [SerializeField] private float dealDelay = 0.05f;
+    [SerializeField] private TutorialManager tutorialManager;
     private Coroutine dealBoardCoroutine;
 
     private void Awake()
@@ -32,7 +33,6 @@ public class BoardManager : MonoBehaviour
         else Destroy(gameObject);
 
         if (gridLayout == null && gridParent != null) gridLayout = gridParent.GetComponent<GridLayoutGroup>();
-        RectTransform gridRect = gridParent.GetComponent<RectTransform>();
     }
 
     private void Start()
@@ -203,13 +203,11 @@ public class BoardManager : MonoBehaviour
 
     private IEnumerator DealCardsRoutine()
     {
-        // Kunci seluruh klik kartu di MatchManager selama proses deal!
         if (MatchManager.Instance != null)
         {
             MatchManager.Instance.SetInputLocked(true);
         }
 
-        // Tunggu sampai seluruh Canvas & GridLayoutGroup selesai menghitung posisi world tiap kartu
         Canvas.ForceUpdateCanvases();
         yield return new WaitForEndOfFrame();
 
@@ -224,11 +222,15 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        // Tunggu hingga kartu terakhir mendarat di slotnya
         float totalDealDuration = ((activeCard.Count - 1) * dealDelay) + singleCardTravelTime;
         yield return new WaitForSeconds(totalDealDuration);
 
-        // Buka kunci input setelah semua kartu mendarat
+        // Tunggu sampai tutorial selesai jika sedang terbuka agar input papan tidak terbuka duluan
+        while (tutorialManager != null && tutorialManager.IsTutorialActive)
+        {
+            yield return null;
+        }
+
         if (MatchManager.Instance != null)
         {
             MatchManager.Instance.SetInputLocked(false);
@@ -236,7 +238,6 @@ public class BoardManager : MonoBehaviour
 
         dealBoardCoroutine = null;
 
-        // Jalankan Eye of Horus setelah semua kartu selesai di-deal agar tidak ketimpa flip/deal
         if (GameManager.Instance != null && GameManager.Instance.CurrentRun != null &&
             GameManager.Instance.CurrentRun.HasSeal(WaxSealType.EyeOfHorus))
         {
@@ -263,12 +264,12 @@ public class BoardManager : MonoBehaviour
             }
         }
 
-        int actualCount = Mathf.Min(count, activeCard.Count);
+        int actualCount = Mathf.Min(count, closedCards.Count);
         for (int i = 0; i < actualCount; i++)
         {
-            int randIdx = Random.Range(0, activeCard.Count);
-            activeCard[randIdx].Peek(duration);
-            activeCard.RemoveAt(randIdx);
+            int randIdx = Random.Range(0, closedCards.Count);
+            closedCards[randIdx].Peek(duration);
+            closedCards.RemoveAt(randIdx);
         }
     }
 

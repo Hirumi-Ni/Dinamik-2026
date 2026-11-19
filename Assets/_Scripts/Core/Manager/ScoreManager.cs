@@ -93,9 +93,9 @@ public class ScoreManager : MonoBehaviour
         float usagePercentage = ((float)turnsUsed / maxTurn) * 100f;
 
         float baseTurnMult = 0.5f;
-        if (usagePercentage <= 30f) baseTurnMult = 3.0f;
-        else if (usagePercentage <= 60f) baseTurnMult = 2.0f;
-        else if (usagePercentage <= 70f) baseTurnMult = 1.0f;
+        if (usagePercentage <= 40f) baseTurnMult = 3.0f;
+        else if (usagePercentage <= 70f) baseTurnMult = 2.0f;
+        else if (usagePercentage <= 90f) baseTurnMult = 1.0f;
 
         if (UpgradeManager.Instance != null)
         {
@@ -111,9 +111,9 @@ public class ScoreManager : MonoBehaviour
         float nextUsagePercentage = ((float)nextTurnsUsed / maxTurn) * 100f;
 
         float nextBaseTurnMult = 0.5f;
-        if (nextUsagePercentage <= 30f) nextBaseTurnMult = 3.0f;
+        if (nextUsagePercentage <= 40f) nextBaseTurnMult = 3.0f;
         else if (nextUsagePercentage <= 60f) nextBaseTurnMult = 2.0f;
-        else if (nextUsagePercentage <= 70f) nextBaseTurnMult = 1.0f;
+        else if (nextUsagePercentage <= 80f) nextBaseTurnMult = 1.0f;
 
         if (UpgradeManager.Instance != null)
         {

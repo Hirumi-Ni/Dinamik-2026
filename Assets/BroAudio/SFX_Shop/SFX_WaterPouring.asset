@@ -19,10 +19,10 @@ MonoBehaviour:
   - AudioClip: {fileID: 8300000, guid: cc7337b54fce7824984de258fa8d431b, type: 3}
     Volume: 1
     Delay: 0
-    StartPosition: 0
-    EndPosition: 0
-    FadeIn: 0
-    FadeOut: 0
+    StartPosition: 0.486
+    EndPosition: 10.415
+    FadeIn: 0.586
+    FadeOut: 0.469
     Weight: 0
   <AudioAsset>k__BackingField: {fileID: 11400000, guid: 835b6dc78e674824bafea911920a0143, type: 2}
   <AudioType>k__BackingField: 8

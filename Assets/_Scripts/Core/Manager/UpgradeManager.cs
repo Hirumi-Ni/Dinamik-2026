@@ -104,13 +104,16 @@ public class UpgradeManager : MonoBehaviour
         {
             case ConsumableType.Lens:
                 if (BoardManager.Instance != null) BoardManager.Instance.PeekRandomCards(3, 1.5f);
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Shine);
                 break;
 
             case ConsumableType.Hourglass:
                 if (ScoreManager.Instance != null) ScoreManager.Instance.AddTurn(3);
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Hourglass);
                 break;
 
             case ConsumableType.Garlic:
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Garlic);
                 if (MatchManager.Instance != null && MatchManager.Instance.TryDefuseActiveDeathCard())
                 {
                     break;
@@ -124,6 +127,7 @@ public class UpgradeManager : MonoBehaviour
 
             case ConsumableType.Elixir:
                 elixirRemainingTurns = 3;
+                AudioManager.Instance.PlayAudio(AudioManager.Instance.SFX_Elixir);
                 break;
         }
     }

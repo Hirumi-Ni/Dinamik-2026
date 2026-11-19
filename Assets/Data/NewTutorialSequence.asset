@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95212f265d7a59641ab3466a03205423, type: 3}
+  m_Name: NewTutorialSequence
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialSequenceSO
+  steps:
+  - slideImage: {fileID: 21300000, guid: b00e594f46a36e1489bdb1bcdf9206bc, type: 3}
+    dialogPositionIndex: 0
+    characterPose: 2
+    dialogText: Welcome to Pandemonium, mortal! I'm Pandora. Flip matching Sigils
+      to hit the target score and clear the stage!
+  - slideImage: {fileID: 21300000, guid: 85c4bf04e88b923489b580b78450c38d, type: 3}
+    dialogPositionIndex: 1
+    characterPose: 4
+    dialogText: On the left, you'll see your Life and Tokens. Keep your life intact,
+      and spend tokens in my shop later!
+  - slideImage: {fileID: 21300000, guid: 40954c732f648084eb4087b01a4b202d, type: 3}
+    dialogPositionIndex: 2
+    characterPose: 4
+    dialogText: On the right are your Score and remaining Turns. Match cards back-to-back
+      to build Combos!
+  - slideImage: {fileID: 21300000, guid: 40954c732f648084eb4087b01a4b202d, type: 3}
+    dialogPositionIndex: 2
+    characterPose: 4
+    dialogText: 'Remember: less is more, and more is worst. The more turns you spend,
+      the lower your Multiplier drops shrinking your final score!'
+  - slideImage: {fileID: 21300000, guid: 681449812f458834f9355cfa9fe6252b, type: 3}
+    dialogPositionIndex: 3
+    characterPose: 3
+    dialogText: Beware of Cursed Cards! Flip one, and you must match a pair of identical
+      Sigils on your very next turn to disarm it or lose a life!
+  - slideImage: {fileID: 0}
+    dialogPositionIndex: 0
+    characterPose: 2
+    dialogText: That's all! Now show me what you've got!
