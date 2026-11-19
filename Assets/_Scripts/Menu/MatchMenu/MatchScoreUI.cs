@@ -5,21 +5,19 @@ using DG.Tweening;
 
 public class MatchScoreUI : MonoBehaviour
 {
-    [Header("Score & Turn Displays")]
+    [Header("Score & Turn Displays (Existing)")]
     [SerializeField] private TMP_Text scoreTargetText;
-    [SerializeField] private TMP_Text baseScoreText;
     [SerializeField] private TMP_Text currentScoreText;
     [SerializeField] private TMP_Text turnText;
     [SerializeField] private TMP_Text multText;
     [SerializeField] private TMP_Text comboText;
 
-    [Header("Next Mult Warning & Match Popup")]
-    [SerializeField] private TMP_Text nextMultWarningText;
-    [SerializeField] private Image baseMultBadgeImage;
-    [SerializeField] private TMP_Text matchCalcPopupText;
-
-    [Header("Stage Completion")]
+    [Header("Stage Completion (Existing)")]
     [SerializeField] private Button completeStageButton;
+
+    [Header("Match Juice & Next Mult Indicators (New)")]
+    [SerializeField] private TMP_Text matchCalcPopupText;   // TMP_Text baru di bawah garis putus-putus
+    [SerializeField] private TMP_Text nextMultWarningText;  // TMP_Text baru untuk teks "Next 2x! Mult"
 
     [Header("Feedback Colors")]
     [SerializeField] private Color gainHighlightColor = new Color(0.35f, 1f, 0.5f, 1f);
@@ -27,34 +25,33 @@ public class MatchScoreUI : MonoBehaviour
     [SerializeField] private Color nextDropColor = new Color(1f, 0.8f, 0.2f, 1f);
 
     private int displayedTotalScore = 0;
-    private int displayedBaseScore = 0;
     private float lastMultiplier = 3f;
     private int lastRemainingTurn = -1;
     private bool wasTargetReached = false;
     private Vector2 popupInitialAnchoredPos;
 
     private Color defaultScoreColor = Color.white;
-    private Color defaultBaseColor = Color.white;
     private Color defaultMultColor = Color.white;
     private Color defaultComboColor = Color.white;
     private Color defaultTurnColor = Color.white;
 
     private Tween totalScoreRollTween;
-    private Tween baseScoreRollTween;
-    private Tween multWarningPulseTween;
+    private Tween nextMultPulseTween;
     private Tween finishBtnPulseTween;
     private Sequence calcSeq;
 
     private void Awake()
     {
         if (currentScoreText != null) defaultScoreColor = currentScoreText.color;
-        if (baseScoreText != null) defaultBaseColor = baseScoreText.color;
         if (multText != null) defaultMultColor = multText.color;
         if (comboText != null) defaultComboColor = comboText.color;
         if (turnText != null) defaultTurnColor = turnText.color;
 
         if (matchCalcPopupText != null)
+        {
             popupInitialAnchoredPos = matchCalcPopupText.rectTransform.anchoredPosition;
+            matchCalcPopupText.alpha = 0f;
+        }
     }
 
     private void OnEnable()
@@ -81,78 +78,91 @@ public class MatchScoreUI : MonoBehaviour
         GameEventHandler.OnBombTriggered -= HandleComboBroken;
 
         totalScoreRollTween?.Kill();
-        baseScoreRollTween?.Kill();
-        multWarningPulseTween?.Kill();
+        nextMultPulseTween?.Kill();
         finishBtnPulseTween?.Kill();
         calcSeq?.Kill();
     }
 
     private void Start()
     {
-        if (GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+        SyncInitialUI();
+    }
+
+    private void SyncInitialUI()
+    {
+        if (ScoreManager.Instance != null)
         {
-            scoreTargetText.text = GameManager.Instance.CurrentLevelData.levelTargetScore.ToString("N0");
+            if (scoreTargetText != null)
+                scoreTargetText.text = ScoreManager.Instance.targetScore.ToString();
+
+            displayedTotalScore = ScoreManager.Instance.GetTotalScore();
+            if (currentScoreText != null)
+                currentScoreText.text = displayedTotalScore.ToString();
+
+            lastRemainingTurn = ScoreManager.Instance.remainingTurn;
+            if (turnText != null)
+                turnText.text = lastRemainingTurn.ToString();
+
+            lastMultiplier = ScoreManager.Instance.GetTurnMultiplier();
+            if (multText != null)
+                multText.text = $"{lastMultiplier:0.##}x";
+        }
+        else if (GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+        {
+            if (scoreTargetText != null)
+                scoreTargetText.text = GameManager.Instance.CurrentLevelData.levelTargetScore.ToString();
+
             lastRemainingTurn = GameManager.Instance.CurrentLevelData.levelMaxTurn;
-            turnText.text = lastRemainingTurn.ToString();
+            if (turnText != null)
+                turnText.text = lastRemainingTurn.ToString();
         }
 
-        if (completeStageButton != null) completeStageButton.interactable = false;
-        if (matchCalcPopupText != null) matchCalcPopupText.alpha = 0f;
+        if (completeStageButton != null)
+            completeStageButton.interactable = (ScoreManager.Instance != null && ScoreManager.Instance.IsTargetReached());
 
-        displayedTotalScore = 0;
-        displayedBaseScore = 0;
         wasTargetReached = false;
-        lastMultiplier = (ScoreManager.Instance != null) ? ScoreManager.Instance.GetTurnMultiplier() : 3f;
-
         ResetComboText(animateShake: false);
         UpdateNextTurnMultIndicator(lastMultiplier);
     }
 
     private void HandleGameStateChanged(GameState newState)
     {
-        if (newState == GameState.Match && GameManager.Instance != null && GameManager.Instance.CurrentLevelData != null)
+        if (newState == GameState.Match)
         {
-            scoreTargetText.text = GameManager.Instance.CurrentLevelData.levelTargetScore.ToString("N0");
+            SyncInitialUI();
         }
     }
 
-    private void HandleScoreUpdated(int targetBaseScore, float turnMultiplier, int targetTotalScore)
+    private void HandleScoreUpdated(int baseScore, float turnMultiplier, int totalScore)
     {
-        // 1. Rolling Counter untuk Base Score
-        if (baseScoreText != null && targetBaseScore != displayedBaseScore)
+        // 1. Rolling Counter + Punch pada currentScoreText
+        if (currentScoreText != null)
         {
-            baseScoreRollTween?.Kill();
-            int startBase = displayedBaseScore;
-            baseScoreRollTween = DOTween.To(() => startBase, x =>
+            if (totalScore != displayedTotalScore)
             {
-                displayedBaseScore = x;
-                baseScoreText.text = displayedBaseScore.ToString("N0");
-            }, targetBaseScore, 0.35f).SetEase(Ease.OutCubic);
+                totalScoreRollTween?.Kill();
+                int startTotal = displayedTotalScore;
+                totalScoreRollTween = DOTween.To(() => startTotal, x =>
+                {
+                    displayedTotalScore = x;
+                    currentScoreText.text = displayedTotalScore.ToString();
+                }, totalScore, 0.4f).SetEase(Ease.OutCubic);
 
-            if (targetBaseScore > startBase) PlayGainPulse(baseScoreText, defaultBaseColor, 0.18f);
-        }
-
-        // 2. Rolling Counter untuk Total Score
-        if (currentScoreText != null && targetTotalScore != displayedTotalScore)
-        {
-            totalScoreRollTween?.Kill();
-            int startTotal = displayedTotalScore;
-            totalScoreRollTween = DOTween.To(() => startTotal, x =>
-            {
-                displayedTotalScore = x;
-                currentScoreText.text = displayedTotalScore.ToString("N0");
-            }, targetTotalScore, 0.42f).SetEase(Ease.OutCubic);
-
-            if (targetTotalScore > startTotal)
-                PlayGainPulse(currentScoreText, defaultScoreColor, 0.22f);
+                if (totalScore > startTotal)
+                    PlayGainPulse(currentScoreText, defaultScoreColor, 0.22f);
+                else
+                    PlayDropShake(currentScoreText, defaultScoreColor);
+            }
             else
-                PlayDropShake(currentScoreText, defaultScoreColor);
+            {
+                currentScoreText.text = totalScore.ToString();
+            }
         }
 
-        // 3. Animasi Stage Multiplier (x3 -> x2 -> x1)
+        // 2. Animasi Stage Multiplier (3x -> 2x -> 1x)
         if (multText != null)
         {
-            multText.text = $"x{turnMultiplier:0.##}";
+            multText.text = $"{turnMultiplier:0.##}x";
 
             if (!Mathf.Approximately(turnMultiplier, lastMultiplier))
             {
@@ -166,7 +176,7 @@ public class MatchScoreUI : MonoBehaviour
         lastMultiplier = turnMultiplier;
         UpdateNextTurnMultIndicator(turnMultiplier);
 
-        // 4. Cek & Animasi Tombol Finish Stage
+        // 3. Cek & Animasi Tombol Finish Stage
         if (completeStageButton != null && ScoreManager.Instance != null)
         {
             bool isReached = ScoreManager.Instance.IsTargetReached();
@@ -225,31 +235,24 @@ public class MatchScoreUI : MonoBehaviour
         float nextStageMult = ScoreManager.Instance.GetNextTurnMultiplier();
         bool willDropNextTurn = nextStageMult < currentStageMult;
 
-        multWarningPulseTween?.Kill();
+        nextMultPulseTween?.Kill();
+        nextMultWarningText.transform.localScale = Vector3.one;
 
         if (willDropNextTurn)
         {
-            nextMultWarningText.text = $"Next: x{nextStageMult:0.##} ▼";
+            nextMultWarningText.text = $"Next {nextStageMult:0.##}x! Mult";
             nextMultWarningText.color = nextDropColor;
 
-            if (baseMultBadgeImage != null)
-            {
-                multWarningPulseTween = baseMultBadgeImage
-                    .DOFade(0.55f, 0.5f)
-                    .SetLoops(-1, LoopType.Yoyo);
-            }
+            // Teks berdenyut pelan sebagai peringatan bahwa turn berikutnya pengali akan turun
+            nextMultPulseTween = nextMultWarningText.transform
+                .DOScale(1.08f, 0.55f)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(-1, LoopType.Yoyo);
         }
         else
         {
-            nextMultWarningText.text = $"Next: x{nextStageMult:0.##}";
+            nextMultWarningText.text = $"Next {nextStageMult:0.##}x Mult";
             nextMultWarningText.color = new Color(1f, 1f, 1f, 0.65f);
-
-            if (baseMultBadgeImage != null)
-            {
-                Color c = baseMultBadgeImage.color;
-                c.a = 1f;
-                baseMultBadgeImage.color = c;
-            }
         }
     }
 
@@ -260,7 +263,6 @@ public class MatchScoreUI : MonoBehaviour
             int comboMult = (int)Mathf.Pow(2, currentCombo - 1);
             comboText.text = $"{comboMult}x";
 
-            // Semakin tinggi combo, semakin bertenaga pantulan angkanya
             float punchStrength = Mathf.Min(0.18f + (currentCombo * 0.045f), 0.42f);
             PlayGainPulse(comboText, defaultComboColor, punchStrength);
         }
@@ -280,23 +282,23 @@ public class MatchScoreUI : MonoBehaviour
         matchCalcPopupText.color = Color.white;
         matchCalcPopupText.transform.localScale = Vector3.one * 0.65f;
 
-        // Tahap 1: Tampilkan perkalian kartu (misal: "+200 × 4x")
+        // Tahap 1: Tampilkan perkalian kartu di bawah garis putus-putus (misal: "+200 × 4x")
         matchCalcPopupText.text = $"+{effectiveCardScore} × {matchMult:0.##}x";
 
         calcSeq = DOTween.Sequence();
         calcSeq.Append(matchCalcPopupText.transform.DOScale(1f, 0.16f).SetEase(Ease.OutBack));
         calcSeq.AppendInterval(0.22f);
 
-        // Tahap 2: Ubah menjadi hasil penjumlahan (+800) dengan kilat hijau & punch
+        // Tahap 2: Ubah menjadi hasil bersih (+800) dan punch
         calcSeq.AppendCallback(() =>
         {
-            matchCalcPopupText.text = $"+{addedBaseScore:N0}";
+            matchCalcPopupText.text = $"+{addedBaseScore}";
             matchCalcPopupText.color = gainHighlightColor;
             matchCalcPopupText.transform.DOPunchScale(Vector3.one * 0.25f, 0.2f, 5, 1f);
         });
         calcSeq.AppendInterval(0.24f);
 
-        // Tahap 3: Melesat ke atas menyatu ke area Current Score lalu memudar
+        // Tahap 3: Terbang naik menyatu ke currentScoreText di atas garis lalu memudar
         calcSeq.Append(popupRect.DOAnchorPosY(popupInitialAnchoredPos.y + 42f, 0.25f).SetEase(Ease.InBack));
         calcSeq.Join(matchCalcPopupText.DOFade(0f, 0.25f));
     }
