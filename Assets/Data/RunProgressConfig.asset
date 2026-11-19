@@ -26,3 +26,18 @@ MonoBehaviour:
     possibleLevels:
     - {fileID: 11400000, guid: 26d6c0903fcbe3f45a22abc22a2acc37, type: 2}
     - {fileID: 11400000, guid: 135b726a9726ca148b4a65e0bd8de1b4, type: 2}
+    - {fileID: 11400000, guid: 28296b1cd548e164298b2423998ba5c4, type: 2}
+  - stageName: Stage 4
+    possibleLevels:
+    - {fileID: 11400000, guid: e827bbe9d67fcda42803dbcea9339dfa, type: 2}
+    - {fileID: 11400000, guid: 6f7d772d35dd4ca46be6da4cd6490ef2, type: 2}
+    - {fileID: 11400000, guid: 60f22ada7bff36145880a5bfca5b3561, type: 2}
+  - stageName: Stage 5
+    possibleLevels:
+    - {fileID: 11400000, guid: 1d00cacdafeaa4542b1165b4f9e87e3b, type: 2}
+    - {fileID: 11400000, guid: 07681e2dafa6e0c4fb62a635a2be07a4, type: 2}
+    - {fileID: 11400000, guid: cdf10fd1f43d57f46acae09becb07f99, type: 2}
+    - {fileID: 11400000, guid: d3247ff1c4d051d4d997d882e7f14cef, type: 2}
+  - stageName: Stage 6
+    possibleLevels:
+    - {fileID: 11400000, guid: 305461386d062444cbd33f558b02ca7b, type: 2}

@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
   levelName: Level 3.1
   levelDesc: Desc
-  levelTargetScore: 1000
-  levelMaxTurn: 30
-  levelMaxCluster: 5
-  levelBombPair: 1
+  levelTargetScore: 2400
+  levelMaxTurn: 14
+  levelMaxCluster: 3
   levelSymbols:
-  - {fileID: 11400000, guid: dcf6a8cad4240c743a528fc5687f40c9, type: 2}
+  - {fileID: 11400000, guid: a8ea8c6b64f048d4289975e97def187c, type: 2}
   - {fileID: 11400000, guid: b4c6ace9c9aebae4f8e7a6b002b2c690, type: 2}
+  levelBombPair: 1
+  levelTotalCards: 12
