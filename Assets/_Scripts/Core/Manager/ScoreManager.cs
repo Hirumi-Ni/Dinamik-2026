@@ -51,8 +51,11 @@ public class ScoreManager : MonoBehaviour
             matchAdditiveMult += 1.5f;
         }
 
-        int addedScore = Mathf.RoundToInt(effectiveCardScore * matchMult * matchAdditiveMult);
+        float totalMatchMult = matchMult * matchAdditiveMult;
+        int addedScore = Mathf.RoundToInt(effectiveCardScore * totalMatchMult);
         baseScore += addedScore;
+
+        GameEventHandler.OnMatchScoreCalculated?.Invoke(effectiveCardScore, totalMatchMult, addedScore);
 
         if (hasUpgradeMgr) UpgradeManager.Instance.OnMatchResolved(cardData, currentCombo);
 
@@ -100,6 +103,24 @@ public class ScoreManager : MonoBehaviour
         }
 
         return baseTurnMult;
+    }
+
+    public float GetNextTurnMultiplier()
+    {
+        int nextTurnsUsed = (maxTurn - remainingTurn) + 1;
+        float nextUsagePercentage = ((float)nextTurnsUsed / maxTurn) * 100f;
+
+        float nextBaseTurnMult = 0.5f;
+        if (nextUsagePercentage <= 30f) nextBaseTurnMult = 3.0f;
+        else if (nextUsagePercentage <= 60f) nextBaseTurnMult = 2.0f;
+        else if (nextUsagePercentage <= 70f) nextBaseTurnMult = 1.0f;
+
+        if (UpgradeManager.Instance != null)
+        {
+            return UpgradeManager.Instance.GetEffectiveBaseMult(nextBaseTurnMult);
+        }
+
+        return nextBaseTurnMult;
     }
 
     public int GetTotalScore()

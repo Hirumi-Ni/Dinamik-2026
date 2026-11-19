@@ -26,4 +26,5 @@ public static class GameEventHandler
     public static Action OnCloseAllSellPopups;
     public static Action OnSigilStatsUpdated;
     public static Action<WaxSealType> OnWaxSealTriggered;
+    public static Action<int, float, int> OnMatchScoreCalculated;
 }

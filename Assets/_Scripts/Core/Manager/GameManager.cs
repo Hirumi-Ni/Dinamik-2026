@@ -1,3 +1,5 @@
+using EasyTransition;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -5,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    [SerializeField] private TransitionSettings transitionMode;
 
     [Header("Global Config")]
     [SerializeField] private int defaultMaxHP = 3;
@@ -243,12 +246,12 @@ public class GameManager : MonoBehaviour
 
     public void ChangeScene(GameScenes gameScenes)
     {
-        SceneManager.LoadScene(gameScenes.ToString());
+        TransitionManager.Instance().Transition(gameScenes.ToString(), transitionMode, 0f);
     }
 
     public void RestartScene()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().ToString()); 
+    { 
+        TransitionManager.Instance().Transition(SceneManager.GetActiveScene().ToString(), transitionMode, 0f);
     }
     #endregion
 

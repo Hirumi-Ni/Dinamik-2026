@@ -1005,6 +1005,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8b2b09a70b44a744aa1e674cc264cdd, type: 3}
+--- !u!1001 &339473479
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2328714125209869250, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3401685301880529874, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 08c64c4814ba2bd4da9a585b250ddfb2, type: 3}
 --- !u!1 &441744848
 GameObject:
   m_ObjectHideFlags: 0
@@ -2112,6 +2169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681c7be9859bf484f9abe3ac1a8f5fd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  transitionMode: {fileID: 0}
   defaultMaxHP: 3
   startingLevelData: {fileID: 11400000, guid: 287e195119140c64da6353d06834512f, type: 2}
   maxPassiveSlot: 4
@@ -3198,6 +3256,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8b2b09a70b44a744aa1e674cc264cdd, type: 3}
+--- !u!1001 &1482413929
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1498912945784054469, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_Name
+      value: TransitionManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1348.0114
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 524.9964
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1861412895869792241, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 18f8998df613f8a46ba408243d95a16b, type: 3}
 --- !u!1 &1498246537
 GameObject:
   m_ObjectHideFlags: 0
@@ -7016,11 +7131,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchScoreUI
   scoreTargetText: {fileID: 5302570952874265969}
+  baseScoreText: {fileID: 0}
   currentScoreText: {fileID: 8202271100652823710}
   turnText: {fileID: 2198848965384287582}
   multText: {fileID: 2854374130960394715}
   comboText: {fileID: 8529173298968634129}
+  nextMultWarningText: {fileID: 0}
+  baseMultBadgeImage: {fileID: 0}
+  matchCalcPopupText: {fileID: 0}
   completeStageButton: {fileID: 8984313842414024864}
+  gainHighlightColor: {r: 0.35, g: 1, b: 0.5, a: 1}
+  dropWarningColor: {r: 1, g: 0.3, b: 0.3, a: 1}
+  nextDropColor: {r: 1, g: 0.8, b: 0.2, a: 1}
 --- !u!114 &6034490694555844713
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8085,3 +8207,5 @@ SceneRoots:
   - {fileID: 7118810344505041981}
   - {fileID: 740632439}
   - {fileID: 299892368}
+  - {fileID: 339473479}
+  - {fileID: 1482413929}
