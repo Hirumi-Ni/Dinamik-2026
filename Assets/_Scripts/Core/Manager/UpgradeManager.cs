@@ -168,7 +168,7 @@ public class UpgradeManager : MonoBehaviour
         if (Run.HasSeal(WaxSealType.Fortune))
         {
             total = Mathf.CeilToInt(total * 1.4f);
-            GameEventHandler.OnWaxSealTriggered(WaxSealType.SwiftExecution);
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.Fortune);
 
         }
         return total;

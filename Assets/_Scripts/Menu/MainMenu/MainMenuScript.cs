@@ -11,4 +11,9 @@ public class MainMenuScript : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void MainMenuButton()
+    {
+        GameManager.Instance.ChangeScene(GameScenes.MainMenuScene);
+    }
 }
