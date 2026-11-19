@@ -15,6 +15,7 @@ public class WaxSealHUDItem : MonoBehaviour
     private bool hasSealEquipped = false;
     private Color defaultIconColor = Color.white;
     private RectTransform iconRect;
+    private float lastTriggerTime = -1f;
 
     private void Awake()
     {
@@ -23,6 +24,18 @@ public class WaxSealHUDItem : MonoBehaviour
             iconRect = sealIconImage.rectTransform;
             defaultIconColor = sealIconImage.color;
         }
+    }
+
+    private void OnEnable()
+    {
+        GameEventHandler.OnWaxSealTriggered += HandleSealTriggered;
+    }
+
+    private void OnDisable()
+    {
+        GameEventHandler.OnWaxSealTriggered -= HandleSealTriggered;
+        iconRect?.DOKill();
+        sealIconImage?.DOKill();
     }
 
     public void Setup(ShopItemDataSO sealData)
@@ -41,7 +54,7 @@ public class WaxSealHUDItem : MonoBehaviour
             if (iconRect == null) iconRect = sealIconImage.rectTransform;
 
             sealIconImage.gameObject.SetActive(true);
-            sealIconImage.sprite = sealData.icon; 
+            sealIconImage.sprite = sealData.icon;
             sealIconImage.color = Color.white;
             defaultIconColor = Color.white;
 
@@ -60,18 +73,6 @@ public class WaxSealHUDItem : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        GameEventHandler.OnWaxSealTriggered += HandleSealTriggered;
-    }
-
-    private void OnDisable()
-    {
-        GameEventHandler.OnWaxSealTriggered -= HandleSealTriggered;
-        iconRect?.DOKill();
-        sealIconImage?.DOKill();
-    }
-
     private void HandleSealTriggered(WaxSealType triggeredType)
     {
         if (!hasSealEquipped || triggeredType != currentSealType) return;
@@ -80,14 +81,19 @@ public class WaxSealHUDItem : MonoBehaviour
 
     public void PlayTriggerJuice()
     {
+        if (Time.unscaledTime - lastTriggerTime < 0.15f) return;
+        lastTriggerTime = Time.unscaledTime;
+
+        //AudioManager.Instance.PlayAudio(); 
+
         if (iconRect != null)
         {
             iconRect.DOKill(complete: true);
             iconRect.localScale = Vector3.one;
             iconRect.localRotation = Quaternion.identity;
 
-            iconRect.DOPunchScale(Vector3.one * punchScaleAmount, 0.32f, 6, 0.8f);
-            iconRect.DOPunchRotation(new Vector3(0f, 0f, 12f), 0.32f, 8, 0.8f);
+            iconRect.DOPunchScale(Vector3.one * punchScaleAmount, 0.35f, 6, 0.8f);
+            iconRect.DOPunchRotation(new Vector3(0f, 0f, 12f), 0.35f, 8, 0.8f);
         }
 
         if (sealIconImage != null)

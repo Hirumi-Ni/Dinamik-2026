@@ -151,7 +151,11 @@ public class UpgradeManager : MonoBehaviour
 
     public void OnClusterCleared()
     {
-        if (Run.HasSeal(WaxSealType.Ouroboros)) Run.ouroborosStack++;
+        if (Run.HasSeal(WaxSealType.Ouroboros))
+        {
+            Run.ouroborosStack++;
+            GameEventHandler.OnWaxSealTriggered(WaxSealType.Ouroboros);
+        }
     }
 
     public int CalculateFinalStageTokens(int rawTokens, int clearedInCluster)

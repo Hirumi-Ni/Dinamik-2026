@@ -4,6 +4,8 @@ using UnityEngine;
 public class ShopManager : MonoBehaviour
 {
     public static ShopManager Instance { get; private set; }
+    [Header("Debug / Testing")]
+    [SerializeField] private ShopItemDataSO debugForceWaxSeal;
 
     [Header("Progression Config")]
     [SerializeField] private RunProgressionDataSO runProgression;
@@ -36,6 +38,26 @@ public class ShopManager : MonoBehaviour
 
     public void GenerateShopStock()
     {
+        CurrentPassiveStock.Clear();
+
+        // --- MODE TESTING: Paksa toko hanya menampilkan 1 Wax Seal tertentu ---
+        if (debugForceWaxSeal != null)
+        {
+            CurrentPassiveStock.Add(debugForceWaxSeal);
+
+            // Opsional: Beri token otomatis jika token saat ini kurang dari harga item tes
+            if (GameManager.Instance != null && GameManager.Instance.CurrentRun != null)
+            {
+                if (GameManager.Instance.CurrentRun.currentTokens < debugForceWaxSeal.basePrice)
+                {
+                    GameManager.Instance.CurrentRun.currentTokens = debugForceWaxSeal.basePrice;
+                }
+            }
+
+            GameEventHandler.OnInventoryUpdated?.Invoke(); // Sesuaikan dengan event refresh UI shop milikmu
+            return;
+        }
+
         CurrentPassiveStock = PickRandomItems(passiveSealPool, 3);
         CurrentGrimoireStock = PickRandomItems(grimoirePool, 2);
         CurrentConsumableStock = PickRandomItems(consumablePool, 2);
