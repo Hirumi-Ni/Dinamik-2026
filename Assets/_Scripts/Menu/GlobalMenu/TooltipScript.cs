@@ -22,13 +22,13 @@ public class TooltipScript : MonoBehaviour
     [SerializeField] private RectTransform rectTransform;
 
     #region [Color Text]
-    private const string COLOR_TOKEN = "#FFD700"; // Yellow/Gold
-    private const string COLOR_MULT = "#5e2534"; // Deep Crimson (use #E0486D if tooltip BG is dark)
-    private const string COLOR_SCORE = "#273c4b"; // Deep Slate Blue (use #4FA3E3 if tooltip BG is dark)
-    private const string COLOR_HP = "#2E7D32"; // Green
-    private const string COLOR_TEMPO = "#D97706"; // Amber/Orange (Turns & Combo)
-    private const string COLOR_SIGIL = "#FFFFFF"; // (Symbols)
-    private const string COLOR_DANGER = "#C62828"; // Red (Bomb)
+    private const string COLOR_TOKEN = "#FFD700";
+    private const string COLOR_MULT = "#E0486D";
+    private const string COLOR_SCORE = "#4FA3E3"; 
+    private const string COLOR_HP = "#2E7D32"; 
+    private const string COLOR_TEMPO = "#D97706"; 
+    private const string COLOR_SIGIL = "#FFFFFF"; 
+    private const string COLOR_DANGER = "#C62828"; 
     #endregion
 
     private void Awake()

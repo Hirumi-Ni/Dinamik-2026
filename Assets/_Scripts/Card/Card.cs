@@ -1,20 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using UnityEngine.EventSystems;
 
-public class Card : MonoBehaviour
+[RequireComponent(typeof(CardView))]
+public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     public CardDataSO CardData { get; private set; }
-
-    [Header("Card Visuals")]
-    [SerializeField] private Image cardBackgroundImage;
-    [SerializeField] private Image cardIconImage;
-    [SerializeField] private Sprite cardFrontViewBG;
-    [SerializeField] private Sprite cardBackViewBG;
-    [SerializeField] private CanvasGroup cardCanvasGroup;
-
-    [Header("Bomb Warning")]
-    [SerializeField] private GameObject bombWarningOverlay;
 
     #region [Properties]
     public bool IsFlipped { get; private set; } = false;
@@ -22,11 +13,13 @@ public class Card : MonoBehaviour
     public bool IsMarkedBomb { get; private set; } = false;
     #endregion
 
-    private Coroutine peekCoroutine;
+    private CardView cardView;
     private Button cardButton;
+    private bool isDealing = false;
 
     private void Awake()
     {
+        cardView = GetComponent<CardView>();
         cardButton = GetComponent<Button>();
     }
 
@@ -36,60 +29,91 @@ public class Card : MonoBehaviour
         IsFlipped = false;
         IsMatched = false;
         IsMarkedBomb = false;
+        isDealing = false;
 
-        if (peekCoroutine != null)
-        {
-            StopCoroutine(peekCoroutine);
-            peekCoroutine = null;
-        }
-
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
         if (cardButton != null) cardButton.interactable = true;
-        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(false);
+        if (cardView != null) cardView.InitializeVisual(CardData.cardIconSprite);
+    }
+    public void PrepareForDeal()
+    {
+        isDealing = true;
+        if (cardButton != null) cardButton.interactable = false;
+        cardView?.PrepareHiddenForDeal();
+    }
 
-        cardBackgroundImage.color = Color.white;
-        cardIconImage.sprite = CardData.cardIconSprite;
+    public void PlayDealAnimation(Vector3 deckWorldOrigin, float delay)
+    {
+        isDealing = true;
+        if (cardButton != null) cardButton.interactable = false;
 
-        ShowBack();
+        if (cardView != null)
+        {
+            cardView.PlayDeal(deckWorldOrigin, delay, () =>
+            {
+                isDealing = false;
+                if (!IsMatched && cardButton != null) cardButton.interactable = true;
+            });
+        }
+        else
+        {
+            isDealing = false;
+            if (cardButton != null) cardButton.interactable = true;
+        }
+    }
+
+    #region [Pointer & Click Events]
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (IsMatched || isDealing) return;
+        cardView?.PlayHoverEnter();
+        cardView?.UpdateHoverTilt(eventData);
+    }
+
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        if (IsMatched || isDealing) return;
+        cardView?.UpdateHoverTilt(eventData);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        cardView?.PlayHoverExit();
     }
 
     public void ClickCard()
     {
-        if (IsFlipped || IsMatched) return;
+        if (IsFlipped || IsMatched || isDealing) return;
         MatchManager.Instance.OnCardClicked(this);
     }
+    #endregion
 
+    #region [State Transitions]
     public void FlipOpen()
     {
         IsFlipped = true;
-
-        if (peekCoroutine != null)
-        {
-            StopCoroutine(peekCoroutine);
-            peekCoroutine = null;
-        }
-
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
-        ShowFront();
+        cardView?.PlayFlip(showFrontSide: true);
     }
 
     public void FlipClose()
     {
         IsFlipped = false;
-        ShowBack();
+        cardView?.PlayFlip(showFrontSide: false);
     }
 
-    #region [Death Card States: Armed, Exploded, Defused]
+    public void SetMatched()
+    {
+        IsMatched = true;
+        IsFlipped = true;
+        if (cardButton != null) cardButton.interactable = false;
+        cardView?.SetMatchedVisual();
+    }
+
     public void SetBombArmed()
     {
         IsMatched = true;
         IsFlipped = true;
         if (cardButton != null) cardButton.interactable = false;
-        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(false);
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
-
-        ShowFront();
-        cardBackgroundImage.color = new Color(1f, 0.55f, 0f, 1f); 
+        cardView?.SetBombArmedVisual();
     }
 
     public void SetBombExploded()
@@ -97,11 +121,7 @@ public class Card : MonoBehaviour
         IsMatched = true;
         IsFlipped = true;
         if (cardButton != null) cardButton.interactable = false;
-        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(false);
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
-
-        ShowFront();
-        cardBackgroundImage.color = Color.red; 
+        cardView?.SetBombExplodedVisual();
     }
 
     public void SetBombDefused()
@@ -109,74 +129,21 @@ public class Card : MonoBehaviour
         IsMatched = true;
         IsFlipped = true;
         if (cardButton != null) cardButton.interactable = false;
-        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(false);
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 0.5f;
-
-        ShowFront();
-        cardBackgroundImage.color = Color.gray; // Abu-abu netral
+        cardView?.SetBombDefusedVisual();
     }
     #endregion
 
-    public void SetMatched()
-    {
-        IsMatched = true;
-        IsFlipped = true;
-        if (cardButton != null) cardButton.interactable = false;
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 0.5f;
-    }
-
-    private void ShowFront()
-    {
-        cardIconImage.gameObject.SetActive(true);
-        cardBackgroundImage.sprite = cardFrontViewBG;
-    }
-
-    private void ShowBack()
-    {
-        cardIconImage.gameObject.SetActive(false);
-        cardBackgroundImage.sprite = cardBackViewBG;
-    }
-
-    #region [Upgrade & Consumable Effects: Peek & Garlic]
+    #region [Consumable & Seal Effects]
     public void Peek(float duration)
     {
         if (IsFlipped || IsMatched) return;
-
-        if (peekCoroutine != null) StopCoroutine(peekCoroutine);
-        peekCoroutine = StartCoroutine(PeekRoutine(duration));
-    }
-
-    private IEnumerator PeekRoutine(float duration)
-    {
-        ShowFront();
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 0.45f;
-
-        yield return new WaitForSeconds(duration);
-
-        if (!IsFlipped && !IsMatched)
-        {
-            if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
-            ShowBack();
-        }
-
-        peekCoroutine = null;
+        cardView?.PlayPeek(duration, () => !IsFlipped && !IsMatched);
     }
 
     public void MarkAsBomb()
     {
         IsMarkedBomb = true;
-
-        if (peekCoroutine != null)
-        {
-            StopCoroutine(peekCoroutine);
-            peekCoroutine = null;
-        }
-
-        ShowBack();
-        cardBackgroundImage.color = new Color(0.65f, 0.15f, 0.15f, 1f);
-
-        if (cardCanvasGroup != null) cardCanvasGroup.alpha = 1f;
-        if (bombWarningOverlay != null) bombWarningOverlay.SetActive(true);
+        cardView?.ShowMarkedBombVisual();
     }
     #endregion
 }

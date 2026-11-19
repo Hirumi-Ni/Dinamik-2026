@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GrimCrescent2
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Arcane Crescent Grimoire
-  description: Permanently Increase Crescent Card Value by 50.
-  icon: {fileID: 21300000, guid: c55b05e1736659849a898c2e9905a6a0, type: 3}
+  description: Permanently gain +45 Base Score for Crescent cards.
+  icon: {fileID: 21300000, guid: 860b1d2dd563e0a44a8e5897a76d61fd, type: 3}
   type: 0
   rarity: 1
-  basePrice: 70
+  basePrice: 30
   grimoireTarget: 2
-  scoreBonusValue: 50
+  scoreBonusValue: 45
   sealType: 0
   consumableType: 0

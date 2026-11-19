@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GrimLotus3
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Eldritch Lotus Grimoire
-  description: Permanently Increase Lotus Card Value by 125.
+  description: Permanently gain +100 Base Score for Lotus cards.
   icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
   type: 0
   rarity: 2
-  basePrice: 100
+  basePrice: 50
   grimoireTarget: 4
-  scoreBonusValue: 125
+  scoreBonusValue: 100
   sealType: 0
   consumableType: 0

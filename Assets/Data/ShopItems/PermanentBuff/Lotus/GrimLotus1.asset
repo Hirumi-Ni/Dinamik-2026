@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: GrimLotus1
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Dusty Lotus Grimoire
-  description: Permanently Increase Lotus Card Value by 20.
+  description: Permanently gain +20 Base Score for Lotus cards.
   icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
   type: 0
   rarity: 0
-  basePrice: 40
+  basePrice: 15
   grimoireTarget: 4
   scoreBonusValue: 20
   sealType: 0

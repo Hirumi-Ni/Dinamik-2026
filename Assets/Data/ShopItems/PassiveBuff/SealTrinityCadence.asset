@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Trinity Cadence Seal
   description: Matching Triquetra on turns divisible by 3 grants +1.5x Base Mult.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: f2e8c402caa84554f9fe8af93c86761a, type: 3}
   type: 1
-  rarity: 0
+  rarity: 1
   basePrice: 40
   grimoireTarget: 0
   scoreBonusValue: 0

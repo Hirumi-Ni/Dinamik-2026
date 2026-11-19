@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Crescendo Seal
   description: Permanently gain +50 Base Score whenever you reach a 3x+ Combo.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: 8e6f624af8956044a91cc31f88f64932, type: 3}
   type: 1
-  rarity: 0
-  basePrice: 40
+  rarity: 2
+  basePrice: 60
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 5

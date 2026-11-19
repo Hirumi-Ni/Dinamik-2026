@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd36129c0dcde6240b01061eb93c38ad, type: 3}
   m_Name: ItemHourglass
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
-  itemName: Hour Glass
+  itemName: Hourglass
   description: Gain +3 Turns immediately.
-  icon: {fileID: 21300000, guid: 0a08fa9ec51507e488400cee024073a7, type: 3}
+  icon: {fileID: 21300000, guid: c4492964a63cb494592c9fb4cf23060d, type: 3}
   type: 2
   rarity: 0
-  basePrice: 40
+  basePrice: 20
   grimoireTarget: 0
   scoreBonusValue: 20
   sealType: 0

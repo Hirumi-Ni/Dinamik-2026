@@ -20,7 +20,7 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         onPurchaseCallback = onBuy;
 
         if (slotIcon != null) slotIcon.sprite = item.icon;
-        if (slotPrice != null) slotPrice.text = item.basePrice.ToString();
+        if (slotPrice != null) slotPrice.text = $"${item.basePrice.ToString()}";
         if (soldOverlay != null) soldOverlay.SetActive(false);
         if (buyButton != null) buyButton.interactable = true;
 
@@ -29,16 +29,14 @@ public class ShopItemSlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnBuyButtonClicked()
     {
-        if (CurrentItem != null)
-            onPurchaseCallback?.Invoke(this, CurrentItem);
+        if (CurrentItem != null) onPurchaseCallback?.Invoke(this, CurrentItem);
     }
 
     public void RefreshAffordable(int currentToken)
     {
         if (CurrentItem == null || buyButton == null || !buyButton.interactable) return;
 
-        if (slotPrice != null)
-            slotPrice.color = (currentToken >= CurrentItem.basePrice) ? Color.white : Color.red;
+        if (slotPrice != null) buyButton.interactable = (currentToken >= CurrentItem.basePrice) ? true : false;
     }
 
     public void MarkSold()

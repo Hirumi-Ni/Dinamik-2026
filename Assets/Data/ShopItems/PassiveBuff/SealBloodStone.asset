@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Blood Stone Seal
   description: Gain +2 Max HP and restore +2 HP immediately.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: d1ef93715b9ee2b4c83c80af9496eacd, type: 3}
   type: 1
-  rarity: 0
-  basePrice: 40
+  rarity: 1
+  basePrice: 45
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 3

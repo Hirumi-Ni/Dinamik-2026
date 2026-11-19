@@ -30,7 +30,7 @@ public class RunHUDUI : MonoBehaviour
 
     private void UpdateTokenUI(int tokens)
     {
-        if (tokenText != null) tokenText.text = tokens.ToString();
+        if (tokenText != null) tokenText.text = $"${tokens.ToString()}";
     }
 
     private void UpdateHPUI(int hp)

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Lens
   description: Peek at 3 random hidden cards for 1.5s.
-  icon: {fileID: 21300000, guid: 005888ede18a58e4db8d069cfa3007cb, type: 3}
+  icon: {fileID: 21300000, guid: 06138fd21d3ca714d8b0957f3b6c496a, type: 3}
   type: 2
   rarity: 0
-  basePrice: 40
+  basePrice: 15
   grimoireTarget: 0
   scoreBonusValue: 20
   sealType: 0

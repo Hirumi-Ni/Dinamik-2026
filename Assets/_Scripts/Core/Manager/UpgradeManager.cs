@@ -43,19 +43,16 @@ public class UpgradeManager : MonoBehaviour
         return score;
     }
 
-    public float GetEffectiveBaseMult(float turnMult, CardDataSO card, int remainingTurn)
+    public float GetEffectiveBaseMult(float turnMult)
     {
+        if (Run == null) return turnMult;
+
         float baseMult = turnMult;
 
         if (Run.HasSeal(WaxSealType.GlassCannon))
         {
             int missingHP = Mathf.Max(0, Run.GetEffectiveMaxHP() - Run.currentHP);
             baseMult += missingHP * 0.75f;
-        }
-
-        if (Run.HasSeal(WaxSealType.TrinityCadence) && card.cardType == CardType.Triquetra && remainingTurn % 3 == 0)
-        {
-            baseMult += 1.5f;
         }
 
         if (Run.HasSeal(WaxSealType.Ouroboros))
@@ -70,10 +67,10 @@ public class UpgradeManager : MonoBehaviour
     {
         float mult = Mathf.Pow(2, currentCombo - 1);
 
-        if (Run.HasSeal(WaxSealType.FirstBlood))
+        if (Run != null && Run.HasSeal(WaxSealType.FirstBlood))
         {
-            if (turnsTakenInStage == 0) mult *= 3.0f;
-            else if (turnsTakenInStage == 1) mult *= 2.0f;
+            if (turnsTakenInStage == 1) mult *= 3.0f;
+            else if (turnsTakenInStage == 2) mult *= 2.0f;
         }
 
         if (elixirRemainingTurns > 0)
@@ -83,7 +80,6 @@ public class UpgradeManager : MonoBehaviour
 
         return mult;
     }
-
     public void ActivateConsumable(ShopItemDataSO item)
     {
         if (item == null) return;

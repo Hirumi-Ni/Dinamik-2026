@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: GrimTriquetra1
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Dusty Triquetra Grimoire
-  description: Permanently Increase Triquetra Card Value by 20.
-  icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
+  description: Permanently gain +20 Base Score for Triquetra cards.
+  icon: {fileID: 21300000, guid: 0566d754bd78e3f42841c2f57b716614, type: 3}
   type: 0
   rarity: 0
-  basePrice: 40
+  basePrice: 15
   grimoireTarget: 1
   scoreBonusValue: 20
   sealType: 0

@@ -43,8 +43,10 @@ public class ScoreManager : MonoBehaviour
         int effectiveCardScore = hasUpgradeMgr ? UpgradeManager.Instance.GetEffectiveBaseScore(cardData) : cardData.cardBaseScore;
         float matchMult = hasUpgradeMgr ? UpgradeManager.Instance.GetMatchMult(currentCombo) : Mathf.Pow(2, currentCombo - 1);
 
+        int turnPlayed = maxTurn - remainingTurn;
+
         float matchAdditiveMult = 1.0f;
-        if (run != null && run.HasSeal(WaxSealType.TrinityCadence) && cardData.cardType == CardType.Triquetra && remainingTurn % 3 == 0)
+        if (run != null && run.HasSeal(WaxSealType.TrinityCadence) && cardData.cardType == CardType.Triquetra && turnPlayed > 0 && turnPlayed % 3 == 0)
         {
             matchAdditiveMult += 1.5f;
         }
@@ -53,6 +55,8 @@ public class ScoreManager : MonoBehaviour
         baseScore += addedScore;
 
         if (hasUpgradeMgr) UpgradeManager.Instance.OnMatchResolved(cardData, currentCombo);
+
+        GameEventHandler.OnMatchSuccess?.Invoke(cardData, currentCombo);
 
         NotifyScoreUpdate();
     }
@@ -65,7 +69,6 @@ public class ScoreManager : MonoBehaviour
     public void RegisterTurn()
     {
         remainingTurn--;
-        Debug.Log($"Current Turn {remainingTurn}");
         if (remainingTurn < 0) remainingTurn = 0;
 
         if (UpgradeManager.Instance != null) UpgradeManager.Instance.RegisterTurnAttempt();
@@ -87,24 +90,13 @@ public class ScoreManager : MonoBehaviour
         float usagePercentage = ((float)turnsUsed / maxTurn) * 100f;
 
         float baseTurnMult = 0.5f;
-        if (usagePercentage <= 30f) baseTurnMult = 3.0f; // <= 30% -> 3x
-        else if (usagePercentage <= 60f) baseTurnMult = 2.0f; // 31% - 60% -> 2x
-        else if (usagePercentage <= 70f) baseTurnMult = 1.0f; // 61% - 70% -> 1x
+        if (usagePercentage <= 30f) baseTurnMult = 3.0f;
+        else if (usagePercentage <= 60f) baseTurnMult = 2.0f;
+        else if (usagePercentage <= 70f) baseTurnMult = 1.0f;
 
-        if (GameManager.Instance != null && GameManager.Instance.CurrentRun != null)
+        if (UpgradeManager.Instance != null)
         {
-            GameRunStateData run = GameManager.Instance.CurrentRun;
-
-            if (run.HasSeal(WaxSealType.GlassCannon))
-            {
-                int missingHP = Mathf.Max(0, run.GetEffectiveMaxHP() - run.currentHP);
-                baseTurnMult += missingHP * 0.75f;
-            }
-
-            if (run.HasSeal(WaxSealType.Ouroboros))
-            {
-                baseTurnMult += run.ouroborosStack * 0.15f;
-            }
+            return UpgradeManager.Instance.GetEffectiveBaseMult(baseTurnMult);
         }
 
         return baseTurnMult;

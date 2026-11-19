@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Ankh Blessing Seal
   description: Matching Ankh cards grants +1 Token per 15 Tokens held.
-  icon: {fileID: 21300000, guid: 90912cadfce2c6d44b3ad3ace44154d1, type: 3}
+  icon: {fileID: 21300000, guid: 815725f40be8cf241a50bfe171bdafab, type: 3}
   type: 1
   rarity: 0
-  basePrice: 40
+  basePrice: 35
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 10

@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Ouroboros Seal
   description: Permanently gain +20 Base Score and +0.15x Base Mult per cluster cleared.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: cab9c3a8302bb4640b583b1698893bf2, type: 3}
   type: 1
-  rarity: 0
-  basePrice: 40
+  rarity: 2
+  basePrice: 65
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 13

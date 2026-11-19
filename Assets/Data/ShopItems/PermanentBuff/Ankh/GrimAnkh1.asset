@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Dusty Ankh Grimoire
   description: Permanently gain +20 Base Score for Ankh cards.
-  icon: {fileID: 21300000, guid: 9529190f71664e84d8a23778b9706d6d, type: 3}
+  icon: {fileID: 21300000, guid: ee79d1bbe9d678842af445ba259a190d, type: 3}
   type: 0
   rarity: 0
-  basePrice: 40
+  basePrice: 15
   grimoireTarget: 3
   scoreBonusValue: 20
   sealType: 0

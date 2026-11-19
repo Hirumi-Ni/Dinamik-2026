@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Elixir
   description: 'Double (2x) your Match Mult for the next 3 Turns. '
-  icon: {fileID: 21300000, guid: bac66973cba57b842965eb95154fba7e, type: 3}
+  icon: {fileID: 21300000, guid: 60210d6a6bf1a4a4cac7ca8cb9535ed7, type: 3}
   type: 2
   rarity: 0
-  basePrice: 40
+  basePrice: 25
   grimoireTarget: 0
   scoreBonusValue: 20
   sealType: 0

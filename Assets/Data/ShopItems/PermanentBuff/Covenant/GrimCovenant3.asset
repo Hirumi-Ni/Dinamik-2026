@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GrimCovenant3
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Eldritch Covenant Grimoire
-  description: Permanently Increase Covenant Card Value by 70.
-  icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
+  description: Permanently gain +35 Base Score for All cards.
+  icon: {fileID: 21300000, guid: 18c11ef20b54aff47b333acb21f56658, type: 3}
   type: 0
   rarity: 2
-  basePrice: 100
+  basePrice: 70
   grimoireTarget: 5
-  scoreBonusValue: 70
+  scoreBonusValue: 35
   sealType: 0
   consumableType: 0

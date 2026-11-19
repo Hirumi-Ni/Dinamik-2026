@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Switft Execution Seal
   description: Clear a stage in 1 cluster to gain +30 Tokens and +1 HP.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: 3559fd0141793aa4a80baadd5b06ffb1, type: 3}
   type: 1
-  rarity: 0
-  basePrice: 40
+  rarity: 1
+  basePrice: 45
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 6

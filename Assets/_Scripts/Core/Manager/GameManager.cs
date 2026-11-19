@@ -55,6 +55,14 @@ public class GameManager : MonoBehaviour
     public void StartNewRun()
     {
         CurrentRun = new GameRunStateData(defaultMaxHP);
+        CurrentLevelCluster = 1;
+        CurrentLevelData = startingLevelData;
+
+        if (UpgradeManager.Instance != null)
+        {
+            UpgradeManager.Instance.ResetStageTracker();
+        }
+
         GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
         GameEventHandler.OnTokenChanged?.Invoke(CurrentRun.currentTokens);
         GameEventHandler.OnInventoryUpdated?.Invoke();
@@ -78,22 +86,6 @@ public class GameManager : MonoBehaviour
 
         ShowStageSummary();
     }
-
-    //private int CalculateStageReward()
-    //{
-    //    int baseReward = 25;
-
-    //    // Sisa turn kali 5 token
-    //    int remainingTurns = Mathf.Max(0, ScoreManager.Instance.remainingTurn);
-    //    int turnBonus = remainingTurns * 5;
-
-    //    // Sisa target dibagi 5
-    //    int excessScore = ScoreManager.Instance.GetExcessScore();
-    //    int scoreBonus = excessScore / 5;
-
-    //    int rawTokens = baseReward + turnBonus + scoreBonus;
-    //    return (UpgradeManager.Instance != null) ? UpgradeManager.Instance.CalculateFinalStageTokens(rawTokens, CurrentLevelCluster) : rawTokens;
-    //}
 
     public void ShowStageSummary()
     {
@@ -200,7 +192,7 @@ public class GameManager : MonoBehaviour
 
     public void HealPlayer(int amount)
     {
-        CurrentRun.currentHP++;
+        CurrentRun.currentHP += amount;
         GameEventHandler.OnHPChanged?.Invoke(CurrentRun.currentHP);
     }
 

@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GrimCovenant1
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Dusty Covenant Grimoire
-  description: Permanently Increase Covenant Card Value by 8.
-  icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
+  description: Permanently gain +10 Base Score for All cards.
+  icon: {fileID: 21300000, guid: 07d72569894109a4bb659d9d69007b75, type: 3}
   type: 0
   rarity: 0
-  basePrice: 40
+  basePrice: 25
   grimoireTarget: 5
-  scoreBonusValue: 8
+  scoreBonusValue: 10
   sealType: 0
   consumableType: 0

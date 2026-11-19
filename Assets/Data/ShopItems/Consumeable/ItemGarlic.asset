@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Garlic
   description: Mark 1 hidden Bomb card on the board.
-  icon: {fileID: 21300000, guid: 4cbbf7337aa794bf299ec0044983eef2, type: 3}
+  icon: {fileID: 21300000, guid: 9317bac3fb453224c82e692a5a524a77, type: 3}
   type: 2
   rarity: 0
-  basePrice: 40
+  basePrice: 15
   grimoireTarget: 0
   scoreBonusValue: 20
   sealType: 0

@@ -76,7 +76,7 @@ public class ShopStoreUI : MonoBehaviour
         GameRunStateData run = GameManager.Instance.CurrentRun;
         int cost = ShopManager.Instance.GetHealPrice();
 
-        if (healPriceText != null) healPriceText.text = $"({cost} Token)";
+        if (healPriceText != null) healPriceText.text = $"${cost}";
 
         healButton.interactable = (run.currentHP < run.GetEffectiveMaxHP()) && (run.currentTokens >= cost);
     }

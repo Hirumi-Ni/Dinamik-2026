@@ -15,10 +15,10 @@ MonoBehaviour:
   itemName: First Blood Seal
   description: Gain 3x Mult for the rest of the stage if your first match is on Turn
     1, or 2x Mult on Turn 2.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: 8ea5eb8a8899ff74e861d6687dfb0337, type: 3}
   type: 1
-  rarity: 0
-  basePrice: 40
+  rarity: 1
+  basePrice: 45
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 4

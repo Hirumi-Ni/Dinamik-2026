@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Serene Lotus Seal
   description: Matching Lotus cards at full HP grants +1 Turn.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: 7c9e46c64ab8224408d3b5194cc6cc90, type: 3}
   type: 1
   rarity: 0
-  basePrice: 40
+  basePrice: 35
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 12

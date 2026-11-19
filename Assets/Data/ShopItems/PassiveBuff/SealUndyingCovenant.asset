@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Undying Covenant Seal
   description: Once per stage, survive lethal damage with 1 HP and gain +2 Turns.
-  icon: {fileID: 21300000, guid: 9ea72647c24be493ba6f15a9cd2a24ae, type: 3}
+  icon: {fileID: 21300000, guid: 7ca567e387bfebe47a5b2da836637d28, type: 3}
   type: 1
-  rarity: 0
-  basePrice: 40
+  rarity: 2
+  basePrice: 55
   grimoireTarget: 0
   scoreBonusValue: 0
   sealType: 8

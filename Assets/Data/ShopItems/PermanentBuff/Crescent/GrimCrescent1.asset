@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: GrimCrescent1
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Dusty Crescent Grimoire
-  description: Permanently Increase Crescent Card Value by 20.
-  icon: {fileID: 21300000, guid: c55b05e1736659849a898c2e9905a6a0, type: 3}
+  description: Permanently gain +20 Base Score for Crescent cards.
+  icon: {fileID: 21300000, guid: 7bd472d8f7c21164fbe4cdebabc90015, type: 3}
   type: 0
   rarity: 0
-  basePrice: 40
+  basePrice: 15
   grimoireTarget: 2
   scoreBonusValue: 20
   sealType: 0

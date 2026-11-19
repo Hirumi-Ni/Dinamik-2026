@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e17e2143d2e99e44c9aa29ec48b27389, type: 3}
+  m_Name: Level 2.4
+  m_EditorClassIdentifier: Assembly-CSharp::LevelDataSO
+  levelName: Level 2.4
+  levelDesc: Desc
+  levelTargetScore: 1150
+  levelMaxTurn: 10
+  levelMaxCluster: 2
+  levelSymbols:
+  - {fileID: 11400000, guid: a8ea8c6b64f048d4289975e97def187c, type: 2}
+  - {fileID: 11400000, guid: c12b9fe69e1280f44854f7e3954ef8a2, type: 2}
+  - {fileID: 11400000, guid: dcf6a8cad4240c743a528fc5687f40c9, type: 2}
+  levelBombPair: 1
+  levelTotalCards: 12

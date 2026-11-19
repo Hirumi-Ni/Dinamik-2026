@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GrimCovenant2
   m_EditorClassIdentifier: Assembly-CSharp::ShopItemDataSO
   itemName: Arcane Covenant Grimoire
-  description: Permanently Increase Covenant Card Value by 30.
-  icon: {fileID: 21300000, guid: def92f8e0d8fa2c47b82b2a8e68ab539, type: 3}
+  description: Permanently gain +30 Base Score for All cards.
+  icon: {fileID: 21300000, guid: 44b68fded64f49e48a57f3cd03160b0d, type: 3}
   type: 0
   rarity: 1
-  basePrice: 70
+  basePrice: 45
   grimoireTarget: 5
-  scoreBonusValue: 30
+  scoreBonusValue: 20
   sealType: 0
   consumableType: 0
